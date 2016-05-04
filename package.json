@@ -1,0 +1,33 @@
+{
+  "name": "hackchain",
+  "version": "1.0.0",
+  "description": "Hack the chain",
+  "main": "lib/hackchain.js",
+  "scripts": {
+    "test": "mocha --reporter=spec test/**/*-test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indutny/hackchain.git"
+  },
+  "keywords": [
+    "blockchain",
+    "cpu",
+    "hack"
+  ],
+  "author": "Fedor Indutny <fedor@indutny.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/indutny/hackchain/issues"
+  },
+  "homepage": "https://github.com/indutny/hackchain#readme",
+  "dependencies": {
+    "bn.js": "^4.11.3",
+    "level": "^1.4.0",
+    "obuf": "^1.1.1",
+    "wbuf": "^1.7.1"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
