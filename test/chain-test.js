@@ -71,7 +71,7 @@ describe('Block', () => {
     block.genesis = true;
 
     tx.input(hackchain.constants.empty, 0, new TX.Script());
-    tx.output(new BN(25000000), new TX.Script());
+    tx.output(new BN(hackchain.constants.coinbase), new TX.Script());
 
     async.parallel([
       (callback) => {
@@ -92,4 +92,73 @@ describe('Block', () => {
       });
     });
   });
+
+  it('should fail to verify block without parent', (done) => {
+    const block = new Block(hackchain.constants.empty);
+
+    async.parallel([
+      (callback) => {
+        chain.storeBlock(block, callback);
+      }
+    ], (err) => {
+      if (err)
+        return callback(err);
+
+      block.verify(chain, (err, result) => {
+        assert(err);
+        assert.deepEqual(result, false);
+
+        done();
+      });
+    });
+  });
+
+  it('should fail to verify block without coinbase', (done) => {
+    const block = new Block(hackchain.constants.empty);
+    block.genesis = true;
+
+    async.parallel([
+      (callback) => {
+        chain.storeBlock(block, callback);
+      }
+    ], (err) => {
+      if (err)
+        return callback(err);
+
+      block.verify(chain, (err, result) => {
+        assert(err);
+        assert.deepEqual(result, false);
+
+        done();
+      });
+    });
+  });
+
+  it('should fail to verify tx with negative fee', (done) => {
+    const block = new Block(hackchain.constants.empty);
+    block.genesis = true;
+
+    const tx = new TX();
+    tx.input(hackchain.constants.empty, 0, new TX.Script());
+    tx.output(new BN(hackchain.constants.coinbase).addn(1), new TX.Script());
+    block.addCoinbase(tx);
+
+    async.parallel([
+      (callback) => {
+        chain.storeBlock(block, callback);
+      }
+    ], (err) => {
+      if (err)
+        return callback(err);
+
+      block.verify(chain, (err, result) => {
+        assert(err);
+        assert.deepEqual(result, false);
+
+        done();
+      });
+    });
+  });
+
+  // TODO(indutny): tx input test
 });
