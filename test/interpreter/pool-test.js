@@ -8,11 +8,11 @@ const hackchain = require('../../');
 const Interpreter = hackchain.Interpreter;
 const Assembler = Interpreter.Assembler;
 
-describe('Interpreter', () => {
+describe('Interpreter/Pool', () => {
   let interpreter;
 
   beforeEach(() => {
-    interpreter = new Interpreter();
+    interpreter = new Interpreter.Pool(4);
   });
 
   afterEach(() => {
@@ -59,40 +59,5 @@ describe('Interpreter', () => {
     asm.irq('failure');
   }, (success) => {
     assert(!success);
-  });
-
-  test('yield success (setting value)', (asm) => {
-    asm.irq('yield');
-    asm.movi('r1', 0x123);
-    asm.irq('success');
-  }, (asm) => {
-    asm.movi('r2', 0x456);
-    asm.irq('success');
-  }, (success, interpreter) => {
-    assert(success);
-
-    assert.equal(interpreter.threads[0].regs[1], 0x123);
-    assert.equal(interpreter.threads[1].regs[2], 0x456);
-  });
-
-  test('modifying memory', (asm) => {
-    asm.irq('yield');
-    asm.nop();
-    asm.nop();
-    asm.nop();
-    asm.nop();
-    asm.nop();
-    asm.nop();
-    asm.nop();
-    // halt
-    asm.beq('r0', 'r0', -1);
-    asm.irq('success');
-  }, (asm) => {
-    asm.movi('r1', 0x1000);
-    asm.sw('r0', 'r1', 0x8);
-    asm.irq('success');
-  }, (success, interpreter) => {
-    assert(success);
-    assert.equal(interpreter.memory.readUInt16LE(0x2000 + 0x10), 0);
   });
 });

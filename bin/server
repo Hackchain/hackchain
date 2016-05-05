@@ -22,6 +22,8 @@ config.ssl.cert = fs.readFileSync(config.ssl.cert);
 
 assert(config.pool && typeof config.pool === 'object',
        '`config.pool` is required');
+assert(config.chain && typeof config.chain === 'object',
+       '`config.chain` is required');
 
 const server = new hackchain.Server(config);
 

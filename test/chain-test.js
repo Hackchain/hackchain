@@ -21,7 +21,9 @@ describe('Chain', () => {
   beforeEach(() => {
     fixtures.removeDB();
 
-    chain = new Chain(fixtures.dbPath);
+    chain = new Chain(fixtures.dbPath, {
+      workers: 1
+    });
   });
 
   afterEach((done) => {

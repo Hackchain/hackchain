@@ -8,5 +8,8 @@
   "pool": {
     "size": 1024,
     "interval": 30000
+  },
+  "chain": {
+    "workers": 4
   }
 }
