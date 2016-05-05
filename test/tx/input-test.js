@@ -12,8 +12,8 @@ const Input = TX.Input;
 
 describe('TX/Input', () => {
   it('should render input', () => {
-    const s = new Input(new Buffer('e3b0c44298fc1c149afbf4c8996fb924' +
-                                   '27ae41e4649b934ca495991b7852b855', 'hex'),
+    const s = new Input(Buffer.from('e3b0c44298fc1c149afbf4c8996fb924' +
+                                    '27ae41e4649b934ca495991b7852b855', 'hex'),
                         0x123,
                         new TX.Script());
 
@@ -34,7 +34,7 @@ describe('TX/Input', () => {
       '27ae41e4649b934ca495991b7852b855',
       '0000012300000000'
     ].forEach((chunk) => {
-      buf.push(new Buffer(chunk, 'hex'));
+      buf.push(Buffer.from(chunk, 'hex'));
     });
 
     const i = Input.parse(buf);
@@ -52,7 +52,7 @@ describe('TX/Input', () => {
       'e3b0c44298fc1c149afbf4c8996fb924',
       '27ae41e4649b934ca495991b7852b855'
     ].forEach((chunk) => {
-      buf.push(new Buffer(chunk, 'hex'));
+      buf.push(Buffer.from(chunk, 'hex'));
     });
 
     assert.throws(() => {

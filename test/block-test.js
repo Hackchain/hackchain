@@ -27,9 +27,9 @@ describe('Block', () => {
   it('should parse empty Block', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('00000001000000000000000000000000' +
-                        '00000000000000000000000000000000' +
-                        '0000000000000000', 'hex'));
+    buf.push(Buffer.from('00000001000000000000000000000000' +
+                         '00000000000000000000000000000000' +
+                         '0000000000000000', 'hex'));
 
     const block = Block.parse(buf);
 
@@ -67,10 +67,10 @@ describe('Block', () => {
   it('should parse non-empty Block', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('00000001e84712238709398f6d349dc2' +
-                        '250b0efca4b72d8c2bfb7b74339d30ba' +
-                        '94056b14000000010000000100000000' +
-                        '00000000', 'hex'));
+    buf.push(Buffer.from('00000001e84712238709398f6d349dc2' +
+                         '250b0efca4b72d8c2bfb7b74339d30ba' +
+                         '94056b14000000010000000100000000' +
+                         '00000000', 'hex'));
 
     const block = Block.parse(buf);
 
@@ -85,7 +85,7 @@ describe('Block', () => {
   it('should fail to parse Block without header', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('00000001000000000000000000000000', 'hex'));
+    buf.push(Buffer.from('00000001000000000000000000000000', 'hex'));
 
     assert.throws(() => {
       Block.parse(buf);
@@ -95,9 +95,9 @@ describe('Block', () => {
   it('should fail to parse Block with truncated TX', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('00000001e84712238709398f6d349dc2' +
-                        '250b0efca4b72d8c2bfb7b74339d30ba' +
-                        '94056b14000000010000000100000000', 'hex'));
+    buf.push(Buffer.from('00000001e84712238709398f6d349dc2' +
+                         '250b0efca4b72d8c2bfb7b74339d30ba' +
+                         '94056b14000000010000000100000000', 'hex'));
 
     assert.throws(() => {
       Block.parse(buf);

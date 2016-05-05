@@ -24,7 +24,7 @@ describe('TX/Output', () => {
   it('should parse output', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('000000000001358900000000', 'hex'));
+    buf.push(Buffer.from('000000000001358900000000', 'hex'));
 
     const o = Output.parse(buf);
 
@@ -45,7 +45,7 @@ describe('TX/Output', () => {
   it('should fail to parse invalid output', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('00', 'hex'));
+    buf.push(Buffer.from('00', 'hex'));
 
     assert.throws(() => {
       Output.parse(buf);

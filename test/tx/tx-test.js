@@ -23,7 +23,7 @@ describe('TX', () => {
   it('should parse empty TX', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('000000010000000000000000', 'hex'));
+    buf.push(Buffer.from('000000010000000000000000', 'hex'));
 
     const tx = TX.parse(buf);
 
@@ -42,8 +42,8 @@ describe('TX', () => {
   it('should render non-empty TX', () => {
     const tx = new TX();
 
-    tx.input(new Buffer('e3b0c44298fc1c149afbf4c8996fb924' +
-                        '27ae41e4649b934ca495991b7852b855', 'hex'),
+    tx.input(Buffer.from('e3b0c44298fc1c149afbf4c8996fb924' +
+                         '27ae41e4649b934ca495991b7852b855', 'hex'),
              0x123,
              new TX.Script());
     tx.output(new BN(0x13589), new TX.Script());
@@ -61,8 +61,8 @@ describe('TX', () => {
   it('should hash non-empty TX', () => {
     const tx = new TX();
 
-    tx.input(new Buffer('e3b0c44298fc1c149afbf4c8996fb924' +
-                        '27ae41e4649b934ca495991b7852b855', 'hex'),
+    tx.input(Buffer.from('e3b0c44298fc1c149afbf4c8996fb924' +
+                         '27ae41e4649b934ca495991b7852b855', 'hex'),
              0x123,
              new TX.Script());
     tx.output(new BN(0x13589), new TX.Script());
@@ -80,7 +80,7 @@ describe('TX', () => {
       '649b934ca495991b7852b85500000123',
       '00000000000000000001358900000000'
     ].forEach((chunk) => {
-      buf.push(new Buffer(chunk, 'hex'));
+      buf.push(Buffer.from(chunk, 'hex'));
     });
 
     const tx = TX.parse(buf);
@@ -102,7 +102,7 @@ describe('TX', () => {
   it('should fail to parse TX without header', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('000000', 'hex'));
+    buf.push(Buffer.from('000000', 'hex'));
 
     assert.throws(() => {
       TX.parse(buf);
@@ -112,7 +112,7 @@ describe('TX', () => {
   it('should fail to parse TX without enough space for input', () => {
     const buf = new OBuf();
 
-    buf.push(new Buffer('000000010000000100000001e3b0c442', 'hex'));
+    buf.push(Buffer.from('000000010000000100000001e3b0c442', 'hex'));
 
     assert.throws(() => {
       TX.parse(buf);
