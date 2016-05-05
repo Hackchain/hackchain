@@ -150,7 +150,7 @@ describe('Block', () => {
         return callback(err);
 
       block.verify(chain, (err, result) => {
-        assert(err);
+        assert(/Negative fee/.test(err.message));
         assert.deepEqual(result, false);
 
         done();
@@ -158,5 +158,37 @@ describe('Block', () => {
     });
   });
 
-  // TODO(indutny): tx input test
+  it('should fail to verify tx with non-existent input', (done) => {
+    const block = new Block(hackchain.constants.empty);
+    block.genesis = true;
+
+    const coinbase = new TX();
+    coinbase.input(hackchain.constants.empty, 0, new TX.Script());
+    coinbase.output(new BN(hackchain.constants.coinbase), new TX.Script());
+    block.addCoinbase(coinbase);
+
+    const fake = new TX();
+    fake.output(new BN(1), new TX.Script());
+
+    const tx = new TX();
+    tx.input(fake.hash(), 0, new TX.Script());
+    tx.output(new BN(1), new TX.Script());
+    block.addTX(tx);
+
+    async.parallel([
+      (callback) => {
+        chain.storeBlock(block, callback);
+      }
+    ], (err) => {
+      if (err)
+        return callback(err);
+
+      block.verify(chain, (err, result) => {
+        assert(/Key not found in database/.test(err.message));
+        assert.deepEqual(result, false);
+
+        done();
+      });
+    });
+  });
 });
