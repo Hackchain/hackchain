@@ -63,12 +63,10 @@ describe('Chain', () => {
     });
   });
 
-  it('should verify coinbase-only genesis block', (done) => {
-    const block = new Block(hackchain.constants.empty);
+  it('should verify coinbase-only block', (done) => {
+    const block = new Block(hackchain.constants.genesis);
     const tx = new TX();
     block.addCoinbase(tx);
-
-    block.genesis = true;
 
     tx.input(hackchain.constants.empty, 0, new TX.Script());
     tx.output(new BN(hackchain.constants.coinbase), new TX.Script());
@@ -112,8 +110,7 @@ describe('Chain', () => {
   });
 
   it('should fail to verify block without coinbase', (done) => {
-    const block = new Block(hackchain.constants.empty);
-    block.genesis = true;
+    const block = new Block(hackchain.constants.genesis);
 
     async.parallel([
       (callback) => {
@@ -133,8 +130,7 @@ describe('Chain', () => {
   });
 
   it('should fail to verify tx with negative fee', (done) => {
-    const block = new Block(hackchain.constants.empty);
-    block.genesis = true;
+    const block = new Block(hackchain.constants.genesis);
 
     const tx = new TX();
     tx.input(hackchain.constants.empty, 0, new TX.Script());
@@ -159,8 +155,7 @@ describe('Chain', () => {
   });
 
   it('should fail to verify tx with non-existent input', (done) => {
-    const block = new Block(hackchain.constants.empty);
-    block.genesis = true;
+    const block = new Block(hackchain.constants.genesis);
 
     const coinbase = new TX();
     coinbase.input(hackchain.constants.empty, 0, new TX.Script());
