@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/indutny/hackchain#readme",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "bn.js": "^4.11.3",
     "level": "^1.4.0",
     "obuf": "^1.1.1",

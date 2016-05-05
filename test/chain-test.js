@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const async = require('async');
 const crypto = require('crypto');
 const Buffer = require('buffer').Buffer;
 const BN = require('bn.js');
@@ -57,6 +58,36 @@ describe('Block', () => {
         assert.deepEqual(err, null);
 
         assert.deepEqual(tx2, tx);
+        done();
+      });
+    });
+  });
+
+  it('should verify coinbase-only genesis block', (done) => {
+    const block = new Block(hackchain.constants.empty);
+    const tx = new TX();
+    block.addCoinbase(tx);
+
+    block.genesis = true;
+
+    tx.input(hackchain.constants.empty, 0, new TX.Script());
+    tx.output(new BN(25000000), new TX.Script());
+
+    async.parallel([
+      (callback) => {
+        chain.storeTX(tx, callback);
+      },
+      (callback) => {
+        chain.storeBlock(block, callback);
+      }
+    ], (err) => {
+      if (err)
+        return callback(err);
+
+      block.verify(chain, (err, result) => {
+        assert.deepEqual(err, null);
+        assert.deepEqual(result, true);
+
         done();
       });
     });
