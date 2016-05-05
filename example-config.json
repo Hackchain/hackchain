@@ -1,0 +1,12 @@
+{
+  "port": 1443,
+  "ssl": {
+    "cert": "test/keys/cert.pem",
+    "key": "test/keys/key.pem"
+  },
+  "db": "test/tmp/dev-db",
+  "pool": {
+    "size": 1024,
+    "interval": 30000
+  }
+}
