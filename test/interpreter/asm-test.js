@@ -111,7 +111,7 @@ describe('Interpreter/Assembler', () => {
       const label = asm.bind();
       asm.jmp(label);
 
-      check('c07e');
+      check('c07f');
     });
 
     it('should generate forward `jump`', () => {
@@ -121,6 +121,21 @@ describe('Interpreter/Assembler', () => {
       asm.nop();
 
       check('c0000000');
+    });
+
+    it('should generate `farjmp`', () => {
+      const label = asm.label();
+      asm.farjmp('r1', label);
+      asm.nop();
+      asm.bind(label);
+
+      check('64002484e0800000');
+    });
+
+    it('should generate `movi`', () => {
+      asm.movi('r1', 0x1358);
+
+      check('644d2498');
     });
   });
 });

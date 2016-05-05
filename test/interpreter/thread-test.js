@@ -206,4 +206,16 @@ describe('Interpreter/Thread', () => {
       assert.equal(thread.regs[1], 2);
     });
   });
+
+  // Some masm stuff
+
+  describe('movi', () => {
+    test('it should set 16-bit immediate value', (asm) => {
+      asm.movi('r1', 0xf358);
+      asm.irq('success');
+    }, (thread) => {
+      assert(thread.isSuccess());
+      assert.equal(thread.regs[1], 0xf358);
+    });
+  });
 });
