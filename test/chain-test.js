@@ -15,7 +15,7 @@ const Chain = hackchain.Chain;
 
 const fixtures = require('./fixtures');
 
-describe('Block', () => {
+describe('Chain', () => {
   let chain;
 
   beforeEach(() => {
