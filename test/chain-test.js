@@ -87,7 +87,7 @@ describe('Chain', () => {
       (callback) => {
         chain.getTXBlock(tx.hash(), (err, txBlock) => {
           assert.deepEqual(err, null);
-          assert.deepEqual(txBlock.hash(), block.hash());
+          assert.deepEqual(txBlock, block.hash());
 
           callback(null);
         });
@@ -95,7 +95,7 @@ describe('Chain', () => {
       (callback) => {
         chain.getTXSpentBy(tx.inputs[0].hash, (err, spentBy) => {
           assert.deepEqual(err, null);
-          assert.deepEqual(spentBy.hash(), tx.hash());
+          assert.deepEqual(spentBy, tx.hash());
 
           callback(null);
         });
