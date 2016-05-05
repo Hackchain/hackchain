@@ -73,22 +73,34 @@ describe('Chain', () => {
     tx.input(hackchain.constants.empty, 0, new TX.Script());
     tx.output(new BN(hackchain.constants.coinbase), new TX.Script());
 
-    chain.storeBlock(block, (err) => {
-      if (err)
-        return done(err);
-
-      block.verify(chain, (err, result) => {
-        assert.deepEqual(err, null);
-        assert.deepEqual(result, true);
-
+    async.waterfall([
+      (callback) => {
+        chain.storeBlock(block, callback);
+      },
+      (callback) => {
+        block.verify(chain, (err, result) => {
+          assert.deepEqual(err, null);
+          assert.deepEqual(result, true);
+          callback(null);
+        });
+      },
+      (callback) => {
         chain.getTXBlock(tx.hash(), (err, txBlock) => {
           assert.deepEqual(err, null);
           assert.deepEqual(txBlock.hash(), block.hash());
 
-          done();
+          callback(null);
         });
-      });
-    });
+      },
+      (callback) => {
+        chain.getTXSpentBy(tx.inputs[0].hash, (err, spentBy) => {
+          assert.deepEqual(err, null);
+          assert.deepEqual(spentBy.hash(), tx.hash());
+
+          callback(null);
+        });
+      },
+    ], done);
   });
 
   it('should fail to verify block without parent', (done) => {
