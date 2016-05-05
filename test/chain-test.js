@@ -73,22 +73,20 @@ describe('Block', () => {
     tx.input(hackchain.constants.empty, 0, new TX.Script());
     tx.output(new BN(hackchain.constants.coinbase), new TX.Script());
 
-    async.parallel([
-      (callback) => {
-        chain.storeTX(tx, callback);
-      },
-      (callback) => {
-        chain.storeBlock(block, callback);
-      }
-    ], (err) => {
+    chain.storeBlock(block, (err) => {
       if (err)
-        return callback(err);
+        return done(err);
 
       block.verify(chain, (err, result) => {
         assert.deepEqual(err, null);
         assert.deepEqual(result, true);
 
-        done();
+        chain.getTXBlock(tx.hash(), (err, txBlock) => {
+          assert.deepEqual(err, null);
+          assert.deepEqual(txBlock.hash(), block.hash());
+
+          done();
+        });
       });
     });
   });
