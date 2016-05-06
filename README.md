@@ -188,7 +188,13 @@ NOTE: Reading value of `r0` always returns `0` for your convenience!
 
 Additional opcode-combos are available using the assembler in this repo:
 
-- `movi rA, 16-bit immediate` - will generate two opcodes `lui` nd `addi`
+- `jmp label-name` - generate short (within 64 opcodes) relative jump to the
+  specified label
+- `farjmp label-name` - generate far absolute jump to the specified label
+- `bind label-name` - bind specified label to the current opcode offset
+- `codeOffset <16-bit offset>` - change code offset. Absolutely needed when
+  using `farjmp` in code that doesn't start at `0x0000` memory offset
+- `movi rA, <16-bit immediate>` - will generate two opcodes `lui` nd `addi`
 - `nop` - will generate `add r0, r0, r0`
 
 Examples:
