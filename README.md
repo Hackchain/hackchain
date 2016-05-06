@@ -190,7 +190,8 @@ Additional opcode-combos are available using the assembler in this repo:
 
 - `jmp label-name` - generate short (within 64 opcodes) relative jump to the
   specified label
-- `farjmp label-name` - generate far absolute jump to the specified label
+- `farjmp rA, label-name` - generate far absolute jump to the specified label.
+  NOTE: `rA` register will be overwritten to store the absolute offset
 - `bind label-name` - bind specified label to the current opcode offset
 - `codeOffset <16-bit offset>` - change code offset. Absolutely needed when
   using `farjmp` in code that doesn't start at `0x0000` memory offset
