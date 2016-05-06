@@ -175,6 +175,11 @@ Additional opcode-combos are available using the assembler in this repo:
 - `movi rA, 16-bit immediate` - will generate two opcodes `lui` nd `addi`
 - `nop` - will generate `add r0, r0, r0`
 
+Examples:
+
+  * [advanced RiSC-16 coding][5]
+  * [fighting scripts][6], see section below
+
 ### Spending TX with hc-client
 
 It is possible to generate and send TX using `hc-client`. In order to do this,
@@ -193,6 +198,15 @@ outputs:
       - irq yield
       - irq success
 ```
+
+NOTE: `script` arrays have string values. `,` or ` ` separators may be used
+between opcode and arguments, and between arguments. Arguments are either:
+
+* `rN` - register input/output, where `N` is a number from `0` to `7`
+* `N` - immediate value, where `N` is a decimal integer
+  (either positive or negative)
+* `string` - anything that does not fit into one of two bullet points above.
+  Usually used in `irq` opcodes (`irq success`, `irq failure`, `irq yield`).
 
 Afterwards, one may execute:
 
@@ -301,3 +315,5 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [2]: http://www.eng.umd.edu/~blj/RiSC/RiSC-isa.pdf
 [3]: https://github.com/indutny/hackchain/issues
 [4]: https://en.wikipedia.org/wiki/Endianness
+[5]: http://www.johnloomis.org/ece449/notes/Jacob/ex-5.html
+[6]: https://github.com/indutny/hackchain/blob/c92921b8f44be3343aa98ba0fd740180469aa867/test/interpreter/interpreter-test.js#L78-L97
