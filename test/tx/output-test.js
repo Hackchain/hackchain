@@ -51,4 +51,14 @@ describe('TX/Output', () => {
       Output.parse(buf);
     }, /not enough data/);
   });
+
+  it('should fail to parse invalid output', () => {
+    const buf = new OBuf();
+
+    buf.push(Buffer.from('000000000000000000000000', 'hex'));
+
+    assert.throws(() => {
+      Output.parse(buf);
+    }, /empty value/);
+  });
 });

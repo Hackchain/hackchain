@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const async = require('async');
 const Buffer = require('buffer').Buffer;
 const WBuf = require('wbuf');
 
@@ -27,23 +28,27 @@ describe('Interpreter/Pool', () => {
     return Buffer.concat(buf.render());
   }
 
-  function test(name, output, input, check) {
+  function test(name, output, input, check, times) {
+    if (!times)
+      times = 5;
     it(name, (done) => {
-      interpreter.run({
-        hash: hackchain.constants.genesis,
-        input: genCode(input),
-        output: genCode(output)
-      }, (err, success) => {
-        if (err)
-          return done(err);
+      async.times(times, (i, callback) => {
+        interpreter.run({
+          hash: hackchain.constants.genesis,
+          input: genCode(input),
+          output: genCode(output)
+        }, (err, success) => {
+          if (err)
+            return callback(err);
 
-        if (!check)
-          assert(success);
-        else
-          check(success, interpreter);
+          if (!check)
+            assert(success);
+          else
+            check(success, interpreter);
 
-        done();
-      });
+          callback();
+        });
+      }, done);
     });
   }
 

@@ -18,12 +18,13 @@ const fixtures = require('./fixtures');
 describe('Chain', () => {
   let chain;
 
-  beforeEach(() => {
+  beforeEach((done) => {
     fixtures.removeDB();
 
     chain = new Chain(fixtures.dbPath, {
       workers: 1
     });
+    chain.init(done);
   });
 
   afterEach((done) => {
