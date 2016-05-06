@@ -274,6 +274,7 @@ $ curl https://api.hackchain.darksi.de/help | jq .
 {
   "/": "information about server and last block",
   "/help": "this message",
+  "/unspent": "list of currently unspent transactions",
   "/v1/block/(hash)": "GET block data",
   "/v1/tx/(hash)": "GET/POST transaction data",
   "/v1/tx/(hash)/block": "GET the hash of transaction's block",
