@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+'use strict';
+
+const hackchain = require('../');
+
+const assert = require('assert');
+const fs = require('fs');
+
+const argv = require('yargs')
+    .usage('Usage: $0 --server ... block <hash>\n' +
+           '       $0 --server ... tx <hash>')
+    .alias('s', 'server')
+    .describe('s', 'server address')
+    .demand([ 'server' ])
+    .argv;
+
+const client = new hackchain.Client(argv.server);
+
+if (argv._[0] === 'block') {
+  assert.equal(argv._.length, 2);
+  client.getBlock(argv._[1], (err, block) => {
+    if (err)
+      throw err;
+
+    console.log(block);
+  });
+  return;
+}
+
+if (argv._[0] === 'tx') {
+  assert.equal(argv._.length, 2);
+  client.getTX(argv._[1], (err, tx) => {
+    if (err)
+      throw err;
+
+    console.log(tx);
+  });
+  return;
+}
