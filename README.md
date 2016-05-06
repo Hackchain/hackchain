@@ -222,6 +222,8 @@ outputs:
       - irq success
 ```
 
+(See [example.tx][7] for more sophisticated TX example)
+
 NOTE: `script` arrays have string values. `,` or ` ` separators may be used
 between opcode and arguments, and between arguments. Arguments are either:
 
@@ -341,3 +343,4 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [4]: https://en.wikipedia.org/wiki/Endianness
 [5]: http://www.johnloomis.org/ece449/notes/Jacob/ex-5.html
 [6]: https://github.com/indutny/hackchain/blob/c92921b8f44be3343aa98ba0fd740180469aa867/test/interpreter/interpreter-test.js#L78-L97
+[7]: https://github.com/indutny/hackchain/blob/master/example.tx
