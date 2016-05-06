@@ -69,8 +69,11 @@ describe('Block', () => {
 
     buf.push(Buffer.from('00000001e84712238709398f6d349dc2' +
                          '250b0efca4b72d8c2bfb7b74339d30ba' +
-                         '94056b14000000010000000100000000' +
-                         '00000000', 'hex'));
+                         '94056b14000000010000000100000001' +
+                         '00000001000000000000000000000000' +
+                         '00000000000000000000000000000000' +
+                         '00000000000000000000000000000000' +
+                         '9502f90000000000', 'hex'));
 
     const block = Block.parse(buf);
 
@@ -78,8 +81,8 @@ describe('Block', () => {
     assert.equal(block.version, 1);
     assert.equal(block.parent.toString('hex'), hash.toString('hex'));
     assert.equal(block.txs.length, 1);
-    assert.equal(block.txs[0].inputs.length, 0);
-    assert.equal(block.txs[0].outputs.length, 0);
+    assert.equal(block.txs[0].inputs.length, 1);
+    assert.equal(block.txs[0].outputs.length, 1);
   });
 
   it('should fail to parse Block without header', () => {

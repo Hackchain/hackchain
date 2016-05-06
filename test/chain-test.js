@@ -69,10 +69,10 @@ describe('Chain', () => {
   it('should verify coinbase-only block', (done) => {
     const block = new Block(hackchain.constants.genesis);
     const tx = new TX();
-    block.addCoinbase(tx);
 
     tx.input(hackchain.constants.empty, 0, new TX.Script());
-    tx.output(new BN(hackchain.constants.coinbase), new TX.Script());
+    tx.output(hackchain.constants.coinbase, new TX.Script());
+    block.addCoinbase(tx);
 
     async.waterfall([
       (callback) => {
@@ -145,22 +145,37 @@ describe('Chain', () => {
   });
 
   it('should fail to verify tx with negative fee', (done) => {
-    const block = new Block(hackchain.constants.genesis);
+    const b1 = new Block(hackchain.constants.genesis);
 
-    const tx = new TX();
-    tx.input(hackchain.constants.empty, 0, new TX.Script());
-    tx.output(new BN(hackchain.constants.coinbase).addn(1), new TX.Script());
-    block.addCoinbase(tx);
+    const coinbase = new TX();
+    coinbase.input(hackchain.constants.empty, 0, new TX.Script());
+    coinbase.output(hackchain.constants.coinbase,
+                    new TX.Script(hackchain.constants.coinbaseScript));
+    b1.addCoinbase(coinbase);
 
-    async.parallel([
-      (callback) => {
-        chain.storeBlock(block, callback);
-      }
-    ], (err) => {
+    const b2 = new Block(b1.hash());
+
+    {
+      const tx = new TX();
+      tx.input(hackchain.constants.empty, 0, new TX.Script());
+      tx.output(new BN(0), new TX.Script());
+      b2.addCoinbase(tx);
+    }
+
+    {
+      const tx = new TX();
+      tx.input(coinbase.hash(), 0, new TX.Script());
+      tx.output(hackchain.constants.coinbase.addn(1), new TX.Script());
+      b2.addTX(tx);
+    }
+
+    async.forEachSeries([ b1, b2 ], (block, callback) => {
+      chain.storeBlock(block, callback);
+    }, (err) => {
       if (err)
         return callback(err);
 
-      block.verify(chain, (err, result) => {
+      b2.verify(chain, (err, result) => {
         assert(/Negative fee/.test(err.message));
         assert.deepEqual(result, false);
 
