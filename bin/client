@@ -72,7 +72,9 @@ if (argv.spend) {
         if (err)
           throw err;
 
-        console.log(tx);
+        console.log('!!! Success, tx: %s !!!', tx.hash().toString('hex'));
+        console.log('NOTE: server must mint a new block before ' +
+                    'this TX will be available');
       });
     });
   });
