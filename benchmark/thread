@@ -10,7 +10,7 @@ const Interpreter = hackchain.Interpreter;
 const asm = new Interpreter.Assembler();
 
 // hlt
-asm.jalr('r0', 'r0', 0);
+asm.jalr('r0', 'r0');
 
 const buf = new WBuf();
 asm.render(buf);
