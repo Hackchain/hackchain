@@ -16,12 +16,12 @@ $ npm install -g hackchain
 Hacker has also requested a server info:
 
 ```bash
-$ hc-client -s https://api.hackchain.darksi.de/ --info
+$ hc-client --info
 { version: '1.0.0',
   lastBlock: '0970f19e074abbb879adde0fecdbf67d558b99f8b5574bfe20776a122ff68f8c',
   nextBlockIn: 159 }
 
-$ hc-client -s https://api.hackchain.darksi.de/ \
+$ hc-client \
     --block 0970f19e074abbb879adde0fecdbf67d558b99f8b5574bfe20776a122ff68f8c
 <Block: ...
   ....>
