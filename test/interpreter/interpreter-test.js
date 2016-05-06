@@ -61,6 +61,12 @@ describe('Interpreter', () => {
     assert(!success);
   });
 
+  test('timing out output', (asm) => {
+    asm.beq('r0', 'r0', -1);
+  }, (asm) => {
+    asm.irq('failure');
+  });
+
   test('yield success (setting value)', (asm) => {
     asm.irq('yield');
     asm.movi('r1', 0x123);
