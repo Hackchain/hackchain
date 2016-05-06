@@ -277,4 +277,22 @@ describe('Pool', () => {
       }
     ], done);
   });
+
+  it('should not accept big TX', (done) => {
+    async.waterfall([
+      (callback) => {
+        pool.mint(callback);
+      },
+      (block, callback) => {
+        const tx = new TX();
+        tx.output(new BN(1), new Script(Buffer.alloc(128 * 1024)));
+
+        pool.accept(tx, (err) => {
+          assert(err);
+          assert(/too big/.test(err.message));
+          callback(null);
+        });
+      }
+    ], done);
+  });
 });
