@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Hack the chain",
   "main": "lib/hackchain.js",
+  "bin": {
+    "hc-server": "bin/server",
+    "hc-client": "bin/client"
+  },
   "scripts": {
     "test": "mocha --reporter=spec test/**/*-test.js test/*-test.js"
   },
