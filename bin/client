@@ -57,8 +57,10 @@ if (argv.spend) {
     prompt.start();
     prompt.get({
       properties: {
-        'Send to server? (yes or no)': {
-          pattern: /^(yes|no)$/,
+        confirm: {
+          description: 'Send to server? (yes or no)',
+          pattern: /^(yes|no|y|n)$/,
+          message: 'Please type either `yes` or `no` (or `y`/`n`)',
           required: true
         }
       }
@@ -66,8 +68,7 @@ if (argv.spend) {
       if (err)
         throw err;
 
-      // TODO(indutny): lame
-      if (result['Send to server? (yes or no)'] !== 'yes')
+      if (!/y/.test(result.confirm))
         return console.log('... cancelled');
 
       client.spendTX(tx, (err) => {
