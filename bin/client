@@ -6,19 +6,22 @@ const hackchain = require('../');
 const assert = require('assert');
 const fs = require('fs');
 
-const argv = require('yargs')
-    .usage('Usage: $0 --server ... block <hash>\n' +
-           '       $0 --server ... tx <hash>')
+const yargs = require('yargs')
+    .usage('Usage: $0 --server ... --block <hash>\n' +
+           '       $0 --server ... --tx <hash>\n' +
+           '       $0 --server ... --spend example.tx')
     .alias('s', 'server')
     .describe('s', 'server address')
+    .describe('block', 'block hash')
+    .describe('tx', 'tx hash')
+    .describe('spend', 'path to TX description')
     .demand([ 'server' ])
-    .argv;
+const argv = yargs.argv;
 
 const client = new hackchain.Client(argv.server);
 
-if (argv._[0] === 'block') {
-  assert.equal(argv._.length, 2);
-  client.getBlock(argv._[1], (err, block) => {
+if (argv.block) {
+  client.getBlock(argv.block, (err, block) => {
     if (err)
       throw err;
 
@@ -27,9 +30,8 @@ if (argv._[0] === 'block') {
   return;
 }
 
-if (argv._[0] === 'tx') {
-  assert.equal(argv._.length, 2);
-  client.getTX(argv._[1], (err, tx) => {
+if (argv.tx) {
+  client.getTX(argv.tx, (err, tx) => {
     if (err)
       throw err;
 
@@ -37,3 +39,21 @@ if (argv._[0] === 'tx') {
   });
   return;
 }
+
+if (argv.spend) {
+  const text = fs.readFileSync(argv.spend).toString();
+  client.parseTX(text, (err, tx) => {
+    if (err)
+      throw err;
+
+    client.spendTX(tx, (err) => {
+      if (err)
+        throw err;
+
+      console.log(tx);
+    });
+  });
+  return;
+}
+
+yargs.showHelp();

@@ -1,0 +1,11 @@
+version: 1
+inputs:
+  - hash: 'a1dd41f1efd2498dd8126684fe164d22d6188046b1c71a7d5325c2158965237b'
+    index: 0
+    script:
+      - irq success
+outputs:
+  - value: '2500000000'
+    script:
+      - irq yield
+      - irq success
