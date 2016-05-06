@@ -57,7 +57,7 @@ opportunity to learn about bitcoin internals, and most importantly have some
 fun!
 
 While recommended to read in order, one may skip all sections except
-"Capturing", where the process of capturing (stealing) coins is described in
+[Capturing][], where the process of capturing (stealing) coins is described in
 details.
 
 ### Block
@@ -97,7 +97,7 @@ Spec for the binary encodings of all structures is available below.
 Every transaction has at least one input and output.
 
 Each input has a `hash` of input TX, `index` of output in that TX, and `script`
-to capture it. (See "Capture" section below).
+to capture it. (See ["Capturing" section][Capturing] below).
 
 Each output has a `value` number of coins, and `script` to prevent capturing
 these coins.
@@ -194,7 +194,7 @@ Additional opcode-combos are available using the assembler in this repo:
 Examples:
 
   * [advanced RiSC-16 coding][5]
-  * [fighting scripts][6], see section below
+  * [fighting scripts][6], see [section][Spending TX with hc-client] below
 
 ### Spending TX with hc-client
 
