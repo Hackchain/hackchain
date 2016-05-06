@@ -45,7 +45,7 @@ describe('Chain', () => {
       chain.getBlock(b.hash().toString('hex'), (err, block) => {
         assert.deepEqual(err, null);
 
-        assert.deepEqual(block, b);
+        assert.equal(block.inspect(), b.inspect());
         done();
       });
     });
@@ -60,7 +60,7 @@ describe('Chain', () => {
       chain.getTX(tx.hash().toString('hex'), (err, tx2) => {
         assert.deepEqual(err, null);
 
-        assert.deepEqual(tx2, tx);
+        assert.equal(tx2.inspect(), tx.inspect());
         done();
       });
     });
@@ -116,7 +116,7 @@ describe('Chain', () => {
     function emptyCoinbase(block) {
       const empty = new TX();
 
-      empty.input(block.hash(), 0, new TX.Script());
+      empty.input(block.parent, 0, new TX.Script());
       empty.output(new BN(0), new TX.Script());
       block.addCoinbase(empty);
     }
