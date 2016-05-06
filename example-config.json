@@ -7,7 +7,8 @@
   "db": "test/tmp/dev-db",
   "pool": {
     "size": 1024,
-    "interval": 30000
+    "interval": 3000,
+    "coinbaseInterval": 6000
   },
   "chain": {
     "workers": 4

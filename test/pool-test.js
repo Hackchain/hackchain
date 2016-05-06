@@ -14,6 +14,7 @@ const Block = hackchain.Block;
 const Chain = hackchain.Chain;
 const Pool = hackchain.Pool;
 const Script = TX.Script;
+const coinbase = hackchain.constants.coinbase;
 
 const fixtures = require('./fixtures');
 
@@ -42,10 +43,11 @@ describe('Pool', () => {
 
       pool = new Pool(chain, {
         size: 3,
-        interval: 0
+        interval: 0,
+        coinbaseInterval: 0
       });
 
-      pool.mint(done);
+      pool.mint(coinbase, done);
     });
   });
 
@@ -62,7 +64,7 @@ describe('Pool', () => {
   it('should mint empty block', (done) => {
     const first = chain.lastBlock;
 
-    pool.mint((err) => {
+    pool.mint(coinbase, (err) => {
       if (err)
         return done(err);
 
@@ -88,7 +90,7 @@ describe('Pool', () => {
         pool.accept(tx, callback);
       },
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         assert.equal(block.txs.length, 2);
@@ -98,7 +100,7 @@ describe('Pool', () => {
         assert.deepEqual(block.txs[0].outputs[0].script.opcodes,
                         hackchain.constants.coinbaseScript);
         assert.equal(block.txs[0].outputs[0].value.toString(),
-                     hackchain.constants.coinbase.muln(2).isubn(1));
+                     coinbase.muln(2).isubn(1));
 
         // TX
         assert.deepEqual(block.txs[1].hash(), tx.hash());
@@ -112,7 +114,7 @@ describe('Pool', () => {
     async.waterfall([
       (callback) => {
         async.timesSeries(3, (i, callback) => {
-          pool.mint(callback);
+          pool.mint(coinbase, callback);
         }, callback);
       },
       (blocks, callback) => {
@@ -127,7 +129,7 @@ describe('Pool', () => {
         }, callback);
       },
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         assert.equal(block.txs.length, 4);
@@ -135,7 +137,7 @@ describe('Pool', () => {
         const fees = [];
         for (let i = 1; i < block.txs.length; i++) {
           const output = block.txs[i].outputs[0].value;
-          fees.push(hackchain.constants.coinbase.sub(output).toNumber());
+          fees.push(coinbase.sub(output).toNumber());
         }
 
         assert.deepEqual(fees, [ 3, 2, 1 ]);
@@ -149,7 +151,7 @@ describe('Pool', () => {
     async.waterfall([
       (callback) => {
         async.timesSeries(4, (i, callback) => {
-          pool.mint(callback);
+          pool.mint(coinbase, callback);
         }, callback);
       },
       (blocks, callback) => {
@@ -165,7 +167,7 @@ describe('Pool', () => {
         }, callback);
       },
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         assert.equal(block.txs.length, 4);
@@ -173,7 +175,7 @@ describe('Pool', () => {
         const fees = [];
         for (let i = 1; i < block.txs.length; i++) {
           const output = block.txs[i].outputs[0].value;
-          fees.push(hackchain.constants.coinbase.sub(output).toNumber());
+          fees.push(coinbase.sub(output).toNumber());
         }
 
         assert.deepEqual(fees, [ 5, 3, 2 ]);
@@ -187,7 +189,7 @@ describe('Pool', () => {
     async.waterfall([
       (callback) => {
         async.timesSeries(4, (i, callback) => {
-          pool.mint(callback);
+          pool.mint(coinbase, callback);
         }, callback);
       },
       (blocks, callback) => {
@@ -218,7 +220,7 @@ describe('Pool', () => {
   it('should not accept double-spend TX', (done) => {
     async.waterfall([
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         const tx = feeTX(block, new BN(0));
@@ -234,7 +236,7 @@ describe('Pool', () => {
         });
       },
       (tx, callback) => {
-        pool.mint((err, block) => {
+        pool.mint(coinbase, (err, block) => {
           callback(err, block, tx);
         });
       },
@@ -251,7 +253,7 @@ describe('Pool', () => {
   it('should not accept TX with failing script', (done) => {
     async.waterfall([
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         const tx = feeTX(block, new BN(0));
@@ -260,7 +262,7 @@ describe('Pool', () => {
         });
       },
       (tx, callback) => {
-        pool.mint((err, block) => {
+        pool.mint(coinbase, (err, block) => {
           callback(err, block, tx);
         });
       },
@@ -281,7 +283,7 @@ describe('Pool', () => {
   it('should not accept big TX', (done) => {
     async.waterfall([
       (callback) => {
-        pool.mint(callback);
+        pool.mint(coinbase, callback);
       },
       (block, callback) => {
         const tx = new TX();

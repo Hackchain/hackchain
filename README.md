@@ -49,7 +49,7 @@ software.
 Blocks have a link to the parent block (or a genesis block with the hash
 `0000000....`, all zeroes), and a list of at least one transaction (TX). First
 TX in a block is called a coinbase and (in contrast to bitcoin) can be spent
-by anyone.
+by anyone, unless its output value is `0`.
 
 Block may be inspected using `--block <hash>` argument of the `hc-client`:
 ```
