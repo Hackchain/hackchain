@@ -111,6 +111,12 @@ TX may be inspected using `--tx <hash>` argument of the
   irq success]>> ]>
 ```
 
+Raw hex data may be inspected by running:
+
+```bash
+curl https://api.hackchain.darksi.de/v1/tx/<hash>
+```
+
 ### Capturing
 
 In order to capture someone's coin (or coinbase), the attacker must implement an
@@ -201,6 +207,65 @@ NOTE: While TXs are accepted immediately, they are not available for spending
 until the server will mint a new block. Please check output of
 `hc-client --info` to get the time until the next block.
 
+### Binary Format
+
+All values are in [Big Endian][4].
+
+#### Block
+
+```
+[ 32-bit number ] version
+[ 32 bytes      ] parent sha256 hash
+[ 32-bit number ] TX count
+...               TXs
+```
+
+#### TX
+
+```
+[ 32-bit number ] version
+[ 32-bit number ] input count
+[ 32-bit number ] output count
+...               inputs
+...               outputs
+```
+
+#### Input
+
+```
+[ 32 bytes      ] sha256 hash of input TX
+[ 32-bit number ] input index
+...               script
+```
+
+#### Output
+
+```
+[ 8 bytes       ] big endian big number
+...               script
+```
+
+#### Script
+
+```
+[ 32-bit number ] size of binary data below
+...               binary opcodes for RiSC-16
+```
+
+### Additional Server endpoints
+
+```
+$ curl https://api.hackchain.darksi.de/help | jq .
+{
+  "/": "information about server and last block",
+  "/help": "this message",
+  "/v1/block/(hash)": "GET block data",
+  "/v1/tx/(hash)": "GET/POST transaction data",
+  "/v1/tx/(hash)/block": "GET the hash of transaction's block",
+  "/v1/tx/(hash)/(output index)/spentby": "GET the hash of spending tx"
+  }
+```
+
 ### Bugs
 
 If any bugs, please [file an issue][3]. We will make sure to figure it out!
@@ -234,3 +299,4 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [1]: https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security
 [2]: http://www.eng.umd.edu/~blj/RiSC/RiSC-isa.pdf
 [3]: https://github.com/indutny/hackchain/issues
+[4]: https://en.wikipedia.org/wiki/Endianness
