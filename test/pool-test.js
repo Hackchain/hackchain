@@ -21,6 +21,15 @@ describe('Pool', () => {
   let chain;
   let pool;
 
+  const feeTX = (block, fee) => {
+    const tx = new TX();
+
+    tx.input(block.txs[0].hash(), 0, new Script());
+    tx.output(new BN(block.txs[0].outputs[0].value.sub(fee)), new Script());
+
+    return tx;
+  }
+
   beforeEach((done) => {
     fixtures.removeDB();
 
@@ -100,15 +109,6 @@ describe('Pool', () => {
   });
 
   it('should sort TXs using fee', (done) => {
-    function feeTX(block, fee) {
-      const tx = new TX();
-
-      tx.input(block.txs[0].hash(), 0, new Script());
-      tx.output(new BN(block.txs[0].outputs[0].value.sub(fee)), new Script());
-
-      return tx;
-    }
-
     async.waterfall([
       (callback) => {
         async.timesSeries(3, (i, callback) => {
@@ -146,15 +146,6 @@ describe('Pool', () => {
   });
 
   it('should evict TX using fee', (done) => {
-    function feeTX(block, fee) {
-      const tx = new TX();
-
-      tx.input(block.txs[0].hash(), 0, new Script());
-      tx.output(new BN(block.txs[0].outputs[0].value.sub(fee)), new Script());
-
-      return tx;
-    }
-
     async.waterfall([
       (callback) => {
         async.timesSeries(4, (i, callback) => {
@@ -193,15 +184,6 @@ describe('Pool', () => {
   });
 
   it('should not accept TX with low fee', (done) => {
-    function feeTX(block, fee) {
-      const tx = new TX();
-
-      tx.input(block.txs[0].hash(), 0, new Script());
-      tx.output(new BN(block.txs[0].outputs[0].value.sub(fee)), new Script());
-
-      return tx;
-    }
-
     async.waterfall([
       (callback) => {
         async.timesSeries(4, (i, callback) => {
@@ -227,6 +209,69 @@ describe('Pool', () => {
         pool.accept(tx, (err) => {
           assert(err);
           assert(/Fee is too low/.test(err.message));
+          callback(null);
+        });
+      }
+    ], done);
+  });
+
+  it('should not accept double-spend TX', (done) => {
+    async.waterfall([
+      (callback) => {
+        pool.mint(callback);
+      },
+      (block, callback) => {
+        const tx = feeTX(block, new BN(0));
+        pool.accept(tx, (err) => {
+          callback(err, tx);
+        });
+      },
+      (tx, callback) => {
+        pool.accept(tx, (err) => {
+          assert(err);
+          assert(/Double-spend attempt/.test(err.message));
+          callback(null, tx);
+        });
+      },
+      (tx, callback) => {
+        pool.mint((err, block) => {
+          callback(err, block, tx);
+        });
+      },
+      (block, tx, callback) => {
+        pool.accept(tx, (err) => {
+          assert(err);
+          assert(/Double-spend attempt/.test(err.message));
+          callback(null);
+        });
+      }
+    ], done);
+  });
+
+  it('should not accept TX with failing script', (done) => {
+    async.waterfall([
+      (callback) => {
+        pool.mint(callback);
+      },
+      (block, callback) => {
+        const tx = feeTX(block, new BN(0));
+        pool.accept(tx, (err) => {
+          callback(err, tx);
+        });
+      },
+      (tx, callback) => {
+        pool.mint((err, block) => {
+          callback(err, block, tx);
+        });
+      },
+      (block, tx, callback) => {
+        const invalid = new TX();
+        invalid.input(tx.hash(), 0, new Script());
+        invalid.output(tx.outputs[0].value, new Script());
+
+        pool.accept(invalid, (err) => {
+          assert(err);
+          assert(/failed to capture/.test(err.message));
           callback(null);
         });
       }

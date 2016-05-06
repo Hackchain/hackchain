@@ -94,7 +94,7 @@ describe('Chain', () => {
         });
       },
       (callback) => {
-        chain.getTXSpentBy(tx.inputs[0].hash, (err, spentBy) => {
+        chain.getTXSpentBy(tx.inputs[0].hash, 0, (err, spentBy) => {
           assert.deepEqual(err, null);
           assert.deepEqual(spentBy, tx.hash());
 
