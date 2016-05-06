@@ -191,4 +191,45 @@ describe('Pool', () => {
       }
     ], done);
   });
+
+  it('should not accept TX with low fee', (done) => {
+    function feeTX(block, fee) {
+      const tx = new TX();
+
+      tx.input(block.txs[0].hash(), 0, new Script());
+      tx.output(new BN(block.txs[0].outputs[0].value.sub(fee)), new Script());
+
+      return tx;
+    }
+
+    async.waterfall([
+      (callback) => {
+        async.timesSeries(4, (i, callback) => {
+          pool.mint(callback);
+        }, callback);
+      },
+      (blocks, callback) => {
+        const txs = [
+          feeTX(blocks[0], new BN(3)),
+          feeTX(blocks[1], new BN(1)),
+          feeTX(blocks[2], new BN(2))
+        ];
+
+        async.forEach(txs, (tx, callback) => {
+          pool.accept(tx, callback);
+        }, (err) => {
+          callback(err, blocks[3]);
+        });
+      },
+      (block, callback) => {
+        const tx = feeTX(block, new BN(0));
+
+        pool.accept(tx, (err) => {
+          assert(err);
+          assert(/Fee is too low/.test(err.message));
+          callback(null);
+        });
+      }
+    ], done);
+  });
 });
