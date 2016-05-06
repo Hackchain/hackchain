@@ -11,13 +11,15 @@ const yargs = require('yargs')
     .usage('Usage: $0 --server ... --block <hash>\n' +
            '       $0 --server ... --tx <hash>\n' +
            '       $0 --server ... --spend example.tx\n' +
-           '       $0 --server ... --info')
+           '       $0 --server ... --info\n' +
+           '       $0 --server ... --unspent')
     .alias('s', 'server')
     .describe('s', 'server address')
     .describe('block', 'block hash')
     .describe('tx', 'tx hash')
     .describe('spend', 'path to TX description')
     .describe('info', 'fetch server info')
+    .describe('unspent', 'get the list of top unspent coins')
     .demand([ 'server' ])
 const argv = yargs.argv;
 
@@ -87,6 +89,16 @@ if (argv.info) {
       throw err;
 
     console.log(info);
+  });
+  return;
+}
+
+if (argv.unspent) {
+  client.getUnspent((err, unspent) => {
+    if (err)
+      throw err;
+
+    console.log(unspent);
   });
   return;
 }
