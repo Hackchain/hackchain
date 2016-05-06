@@ -173,6 +173,7 @@ NOTE: Reading value of `r0` always returns `0` for your convenience!
 Additional opcode-combos are available using the assembler in this repo:
 
 - `movi rA, 16-bit immediate` - will generate two opcodes `lui` nd `addi`
+- `nop` - will generate `add r0, r0, r0`
 
 ### Spending TX with hc-client
 
