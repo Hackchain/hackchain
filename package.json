@@ -1,6 +1,6 @@
 {
   "name": "hackchain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hack the chain",
   "main": "lib/hackchain.js",
   "bin": {
