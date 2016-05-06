@@ -1,16 +1,13 @@
 hash: 'a1dd41f1efd2498dd8126684fe164d22d6188046b1c71a7d5325c2158965237b'
 input:
   - movi r1, 0x1000
-  - sw r0, r1, 0x8
+  - sw r0, r1, 0x4
   - irq success
 output:
   - irq yield
   - nop
   - nop
   - nop
-  - nop
-  - nop
-  - nop
-  - nop
-  - beq r0 r0 -1
+  - beq r0 r0 1
   - irq success
+  - irq failure
