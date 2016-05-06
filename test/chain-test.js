@@ -105,26 +105,80 @@ describe('Chain', () => {
   });
 
   it('should report unspent TXs', (done) => {
-    const block = new Block(hackchain.constants.genesis);
-    const tx = new TX();
+    const b1 = new Block(hackchain.constants.genesis);
+    const coinbase = new TX();
 
-    tx.input(hackchain.constants.empty, 0, new TX.Script());
-    tx.output(hackchain.constants.coinbase, new TX.Script());
-    block.addCoinbase(tx);
+    coinbase.input(hackchain.constants.empty, 0, new TX.Script());
+    coinbase.output(hackchain.constants.coinbase,
+                    new TX.Script(hackchain.constants.coinbaseScript));
+    b1.addCoinbase(coinbase);
+
+    function emptyCoinbase(block) {
+      const empty = new TX();
+
+      empty.input(block.hash(), 0, new TX.Script());
+      empty.output(new BN(0), new TX.Script());
+      block.addCoinbase(empty);
+    }
+
+    const b2 = new Block(b1.hash());
+    emptyCoinbase(b2);
+
+    const COUNT = 16;
+
+    const fork = new TX();
+    fork.input(coinbase.hash(), 0, new TX.Script());
+    for (let i = 1; i <= COUNT; i++) {
+      fork.output(new BN(i),
+                  new TX.Script(hackchain.constants.coinbaseScript));
+    }
+    b2.addTX(fork);
+
+    const b3 = new Block(b2.hash());
+    emptyCoinbase(b3);
+
+    function spendFork(i) {
+      const tx = new TX();
+
+      tx.input(fork.hash(), i, new TX.Script());
+      tx.output(new BN(i + 1), new TX.Script());
+      b3.addTX(tx);
+    }
+
+    for (let i = 0; i < COUNT; i++)
+      spendFork(i);
 
     async.waterfall([
       (callback) => {
-        chain.storeBlock(block, callback);
+        async.forEachSeries([ b1, b2 ], (block, callback) => {
+          chain.storeBlock(block, callback);
+        }, callback);
       },
       (callback) => {
-        chain.getUnspentTXs(10, callback);
+        chain.getUnspentTXs(Infinity, callback);
       },
       (txs, callback) => {
-        assert.equal(txs.length, 1);
-        assert.deepEqual(txs[0].hash, tx.hash());
-        assert.equal(txs[0].index, 0);
-        assert.equal(txs[0].value.toString(10),
-                     hackchain.constants.coinbase.toString(10));
+        assert.equal(txs.length, COUNT);
+        for (let i = 0; i < COUNT; i++) {
+          assert.deepEqual(txs[i].hash, fork.hash());
+          assert.equal(txs[i].value.toNumber(), COUNT - i);
+          assert.equal(txs[i].index, COUNT - i - 1);
+        }
+        callback(null);
+      },
+      (callback) => {
+        chain.storeBlock(b3, callback);
+      },
+      (callback) => {
+        chain.getUnspentTXs(Infinity, callback);
+      },
+      (txs, callback) => {
+        assert.equal(txs.length, COUNT);
+        for (let i = 0; i < COUNT; i++) {
+          assert.notDeepEqual(txs[i].hash, fork.hash());
+          assert.equal(txs[i].index, 0);
+          assert.equal(txs[i].value.toNumber(), COUNT - i);
+        }
 
         callback(null);
       }
