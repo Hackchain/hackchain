@@ -1,6 +1,6 @@
 # Hackchain
 
-** Alpha version **
+**Alpha version**
 
 Continuous bitcoin-inspired hackaton.
 
