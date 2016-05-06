@@ -123,6 +123,8 @@ describe('Chain', () => {
         assert.equal(txs.length, 1);
         assert.deepEqual(txs[0].hash, tx.hash());
         assert.equal(txs[0].index, 0);
+        assert.equal(txs[0].value.toString(10),
+                     hackchain.constants.coinbase.toString(10));
 
         callback(null);
       }
