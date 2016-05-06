@@ -3,3 +3,5 @@ npm-debug.log
 test/tmp/*
 !test/tmp/.gitkeep
 config.json
+*.tx
+!example.tx
