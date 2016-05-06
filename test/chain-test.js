@@ -39,31 +39,47 @@ describe('Chain', () => {
   it('should store/load block', (done) => {
     const b = new Block(hackchain.constants.empty);
 
-    chain.storeBlock(b, (err) => {
-      assert.deepEqual(err, null);
-
-      chain.getBlock(b.hash().toString('hex'), (err, block) => {
-        assert.deepEqual(err, null);
-
+    async.waterfall([
+      (callback) => {
+        chain.storeBlock(b, callback);
+      },
+      (callback) => {
+        chain.getBlock(b.hash().toString('hex'), callback);
+      },
+      (block, callback) => {
         assert.equal(block.inspect(), b.inspect());
-        done();
-      });
-    });
+        chain.getRawBlock(b.hash().toString('hex'), callback);
+      },
+      (raw, callback) => {
+        const buf = new WBuf();
+        b.render(buf);
+        assert.deepEqual(raw, Buffer.concat(buf.render()));
+        callback(null);
+      }
+    ], done);
   });
 
   it('should store/load tx', (done) => {
     const tx = new TX();
 
-    chain.storeTX(tx, (err) => {
-      assert.deepEqual(err, null);
-
-      chain.getTX(tx.hash().toString('hex'), (err, tx2) => {
-        assert.deepEqual(err, null);
-
+    async.waterfall([
+      (callback) => {
+        chain.storeTX(tx, callback);
+      },
+      (callback) => {
+        chain.getTX(tx.hash().toString('hex'), callback);
+      },
+      (tx2, callback) => {
         assert.equal(tx2.inspect(), tx.inspect());
-        done();
-      });
-    });
+        chain.getRawTX(tx.hash().toString('hex'), callback);
+      },
+      (raw, callback) => {
+        const buf = new WBuf();
+        tx.render(buf);
+        assert.deepEqual(raw, Buffer.concat(buf.render()));
+        callback(null);
+      }
+    ], done);
   });
 
   it('should verify coinbase-only block', (done) => {
