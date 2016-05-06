@@ -77,8 +77,8 @@ describe('Interpreter', () => {
   }, (success, interpreter) => {
     assert(success);
 
-    assert.equal(interpreter.threads[0].regs[1], 0x123);
-    assert.equal(interpreter.threads[1].regs[2], 0x456);
+    assert.equal(interpreter.threads.output.regs[1], 0x123);
+    assert.equal(interpreter.threads.input.regs[2], 0x456);
   });
 
   test('modifying memory', (asm) => {

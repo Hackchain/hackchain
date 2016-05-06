@@ -5,14 +5,17 @@ const hackchain = require('../');
 
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 const prompt = require('prompt');
+const yaml = require('js-yaml');
 
 const yargs = require('yargs')
-    .usage('Usage: $0 --server ... --block <hash>\n' +
-           '       $0 --server ... --tx <hash>\n' +
-           '       $0 --server ... --spend example.tx\n' +
-           '       $0 --server ... --info\n' +
-           '       $0 --server ... --unspent')
+    .usage('Usage: $0 --block <hash>\n' +
+           '       $0 --tx <hash>\n' +
+           '       $0 --spend example.tx\n' +
+           '       $0 --info\n' +
+           '       $0 --unspent\n' +
+           '       $0 --debug prog.yaml')
     .alias('s', 'server')
     .describe('s', 'server address')
     .describe('block', 'block hash')
@@ -20,6 +23,7 @@ const yargs = require('yargs')
     .describe('spend', 'path to TX description')
     .describe('info', 'fetch server info')
     .describe('unspent', 'get the list of top unspent coins')
+    .describe('debug', 'open program in CLI debugger')
     .default('server', 'https://api.hackchain.darksi.de/')
 const argv = yargs.argv;
 
@@ -47,7 +51,9 @@ if (argv.tx) {
 
 if (argv.spend) {
   const text = fs.readFileSync(argv.spend).toString();
-  client.parseTX(text, (err, tx) => {
+  const data = yaml.safeLoad(text);
+
+  client.parseTX(data, (err, tx) => {
     if (err)
       throw err;
 
@@ -103,4 +109,15 @@ if (argv.unspent) {
   });
   return;
 }
+
+if (argv.debug) {
+  const text = fs.readFileSync(argv.debug).toString();
+  const data = yaml.safeLoad(text);
+
+  const d = new hackchain.Debugger(path.basename(argv.debug), data);
+
+  d.run();
+  return;
+}
+
 yargs.showHelp();

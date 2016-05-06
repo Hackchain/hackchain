@@ -247,6 +247,18 @@ NOTE: While TXs are accepted immediately, they are not available for spending
 until the server will mint a new block. Please check output of
 `hc-client --info` to get the time until the next block.
 
+### Debugger
+
+While some scripts may be easy to follow, others may definitely require more
+detailed investigation. This is where internal debugger may come out handy:
+
+```
+$ hc-client --debug examples/debugger/prog1.yaml
+```
+
+NOTE: `yaml` file with the contents of both scripts and TX hash, must be
+supplied to debugger. See [debugger examples][8]
+
 ### Binary Format
 
 All values are in [Big Endian][4].
@@ -344,3 +356,4 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [5]: http://www.johnloomis.org/ece449/notes/Jacob/ex-5.html
 [6]: https://github.com/indutny/hackchain/blob/c92921b8f44be3343aa98ba0fd740180469aa867/test/interpreter/interpreter-test.js#L78-L97
 [7]: https://github.com/indutny/hackchain/blob/master/examples/tx/
+[8]: https://github.com/indutny/hackchain/blob/master/examples/debugger/
