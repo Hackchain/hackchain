@@ -1,5 +1,6 @@
 {
   "port": 1443,
+  "host": "127.0.0.1",
   "ssl": {
     "cert": "test/keys/cert.pem",
     "key": "test/keys/key.pem"
@@ -8,7 +9,7 @@
   "pool": {
     "size": 1024,
     "interval": 3000,
-    "coinbaseInterval": 6000
+    "coinbaseInterval": 60000
   },
   "chain": {
     "workers": 4

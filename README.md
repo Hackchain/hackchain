@@ -44,6 +44,22 @@ coins and protect them. It is very close to [CTF challenges][1], but
 participants compete with each other instead of attacking some predefined
 software.
 
+New coins are minted only once every 24 hours, so hackers are encouraged to
+steal coins from each other. List of currently unspent coins can be found by
+using `--unspent` argument of `hc-client`, or by running:
+
+```bash
+curl https://api.hackchain.darksi.de/unspent
+```
+
+Being very similar in structure to bitcoin blockchain, hackchain provides an
+opportunity to learn about bitcoin internals, and most importantly have some
+fun!
+
+While recommended to read in order, one may skip all sections except
+"Capturing", where the process of capturing (stealing) coins is described in
+details.
+
 ### Block
 
 Blocks have a link to the parent block (or a genesis block with the hash

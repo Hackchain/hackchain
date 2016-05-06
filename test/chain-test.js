@@ -200,7 +200,7 @@ describe('Chain', () => {
       chain.storeBlock(block, callback);
     }, (err) => {
       if (err)
-        return callback(err);
+        return done(err);
 
       b2.verify(chain, (err, result) => {
         assert(/Negative fee/.test(err.message));
@@ -233,7 +233,7 @@ describe('Chain', () => {
       }
     ], (err) => {
       if (err)
-        return callback(err);
+        return done(err);
 
       block.verify(chain, (err, result) => {
         assert(/Key not found in database/.test(err.message));

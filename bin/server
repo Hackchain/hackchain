@@ -31,7 +31,7 @@ server.init((err) => {
   if (err)
     throw err;
 
-  server.listen(config.port, () => {
+  server.listen(config.port, config.host, () => {
     console.error('Hackchain server listening on: %j', server.address());
   });
 });
