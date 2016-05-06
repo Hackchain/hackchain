@@ -100,7 +100,32 @@ describe('Chain', () => {
 
           callback(null);
         });
+      }
+    ], done);
+  });
+
+  it('should report unspent TXs', (done) => {
+    const block = new Block(hackchain.constants.genesis);
+    const tx = new TX();
+
+    tx.input(hackchain.constants.empty, 0, new TX.Script());
+    tx.output(hackchain.constants.coinbase, new TX.Script());
+    block.addCoinbase(tx);
+
+    async.waterfall([
+      (callback) => {
+        chain.storeBlock(block, callback);
       },
+      (callback) => {
+        chain.getUnspentTXs(10, callback);
+      },
+      (txs, callback) => {
+        assert.equal(txs.length, 1);
+        assert.deepEqual(txs[0].hash, tx.hash());
+        assert.equal(txs[0].index, 0);
+
+        callback(null);
+      }
     ], done);
   });
 
