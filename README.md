@@ -148,12 +148,11 @@ The process:
 1. Spending TX (the one that you wrote) has is loaded to `0x0` offset of the
    memory
 2. `output` script is loaded to `0x1000` offset of the memory and executed
-   until `irq yield`/`irq success`/`irq failure`, or until it executes more than
+   until `irq yield`/`irq success`, or until it executes more than
    `100 * 1024` opcodes (if so - coin is captured, and further steps are
    skipped)
 3. If `irq success` was executed in step 2 - coin is captured and the process
-   ends. If `irq failure` was executed in step 2 - coin is not captured and the
-   process ends. If `irc yield` was executed - proceed to step 4
+   ends. If `irc yield` was executed - proceed to step 4
 4. `input` script is loaded to `0x2000` offset of the memory
 5. One opcode of `output` is executed
 6. If any `irq ...` was executed - the process ends with either captured or
@@ -166,7 +165,7 @@ The process:
 ### Scripts
 
 Quoting [RiSC-16][2], there are 8 different 16-bit registers (`r0`, ..., `r7`),
-and 8 different instructions:
+and 10 different instructions:
 
 - `add rA, rB, rC` - Add contents of regB with regC, store result in regA
 - `addi rA, rB, imm` - Add contents of regB with imm, store result in regA
@@ -183,6 +182,13 @@ and 8 different instructions:
   is the address of the jalr instruction.
 
 They are encoded just as they are described in [a paper][2].
+
+Additional opcodes are added in hackchain:
+
+- `irq success` - terminate thread (see [capturing](#capturing) too), encoded
+  as `0xe001` word in big endian
+- `irq yield` - yield execution to input script (see
+  [step 2 above](#capturing)), encoded as `0xe081` word in big endian
 
 NOTE: Reading value of `r0` always returns `0` for your convenience!
 
@@ -233,7 +239,7 @@ between opcode and arguments, and between arguments. Arguments are either:
 * `N` - immediate value, where `N` is a decimal integer
   (either positive or negative)
 * `string` - anything that does not fit into one of two bullet points above.
-  Usually used in `irq` opcodes (`irq success`, `irq failure`, `irq yield`).
+  Usually used in `irq` opcodes (`irq success`, `irq yield`).
 
 Afterwards, one may execute:
 

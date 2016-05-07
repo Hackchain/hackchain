@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/indutny/hackchain#readme",
   "dependencies": {
-    "hackchain-client": "^1.0.1",
-    "hackchain-debugger": "^1.0.1"
+    "hackchain-client": "^2.0.0",
+    "hackchain-debugger": "^2.0.0"
   }
 }
