@@ -251,7 +251,7 @@ until the server will mint a new block. Please check output of
 
 ### Debugger
 
-[![asciicast](https://asciinema.org/a/44858.png)](https://asciinema.org/a/44858)
+[![asciicast](https://asciinema.org/a/44861.png)](https://asciinema.org/a/44861)
 
 While some scripts may be easy to follow, others may definitely require more
 detailed investigation. This is where internal debugger may come out handy:

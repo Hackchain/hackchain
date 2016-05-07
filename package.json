@@ -4,8 +4,8 @@
   "description": "Hack the chain",
   "main": "lib/hackchain.js",
   "bin": {
-    "hc-server": "bin/server",
-    "hc-client": "bin/client"
+    "hc-client": "bin/hc-client",
+    "hc-debug": "bin/hc-debug"
   },
   "scripts": {
     "test": "mocha --reporter=spec test/**/*-test.js test/*-test.js"
