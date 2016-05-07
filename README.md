@@ -22,13 +22,14 @@ $ hc-client --info
   nextCoinbaseIn: 85817,
   'proof-of-work-complexity': 17 }
 
-$ hc-client \
-    --block 4e9c8600ca954bbfd88a1ca8715e5cf5a751a8e5945802912086e632bec85e1f
-<Block: ...
-  ....>
+$ hc-client --unspent
+[ { hash: '61d9faa5dc429c8eb4f00835f285b3a5f7022f8b557432a7af542d0b778bc14e',
+    index: 4,
+    value: '1500000000' },
+    ... ]
 ```
 
-"I wonder if I can capture some coins from this block...", she thought.
+"I wonder if I can capture some of these coins...", she thought.
 
 ## Description for Hackers
 
