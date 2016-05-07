@@ -205,6 +205,8 @@ Examples:
 
 ### Spending TX with hc-client
 
+[![asciicast](https://asciinema.org/a/44859.png)](https://asciinema.org/a/44859)
+
 It is possible to generate and send TX using `hc-client`. In order to do this,
 a yaml-formatted `tx-name.tx` file must be created:
 
