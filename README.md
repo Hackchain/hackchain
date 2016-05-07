@@ -17,12 +17,13 @@ Hacker has also requested a server info:
 
 ```bash
 $ hc-client --info
-{ version: '1.0.0',
-  lastBlock: '0970f19e074abbb879adde0fecdbf67d558b99f8b5574bfe20776a122ff68f8c',
-  nextBlockIn: 159 }
+{ lastBlock: '4e9c8600ca954bbfd88a1ca8715e5cf5a751a8e5945802912086e632bec85e1f',
+  nextBlockIn: 17,
+  nextCoinbaseIn: 85817,
+  'proof-of-work-complexity': 17 }
 
 $ hc-client \
-    --block 0970f19e074abbb879adde0fecdbf67d558b99f8b5574bfe20776a122ff68f8c
+    --block 4e9c8600ca954bbfd88a1ca8715e5cf5a751a8e5945802912086e632bec85e1f
 <Block: ...
   ....>
 ```
