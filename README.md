@@ -60,7 +60,7 @@ fun!
 
 While recommended to read in order, one may skip all sections except
 [Capturing](#capturing), where the process of capturing (stealing) coins is
-described in details.
+described in detail.
 
 ### Block
 
