@@ -26,20 +26,7 @@
   },
   "homepage": "https://github.com/indutny/hackchain#readme",
   "dependencies": {
-    "async": "^2.0.0-rc.3",
-    "blessed": "^0.1.81",
-    "bn.js": "^4.11.3",
-    "debug": "^2.2.0",
-    "js-yaml": "^3.6.0",
-    "level": "^1.4.0",
-    "lru": "^2.0.1",
-    "obuf": "^1.1.1",
-    "package": "^1.0.1",
-    "prompt": "^1.0.0",
-    "wbuf": "^1.7.1",
-    "yargs": "^4.6.0"
-  },
-  "devDependencies": {
-    "mocha": "^2.4.5"
+    "hackchain-client": "^1.0.1",
+    "hackchain-debugger": "^1.0.1"
   }
 }

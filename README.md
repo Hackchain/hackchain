@@ -257,7 +257,7 @@ While some scripts may be easy to follow, others may definitely require more
 detailed investigation. This is where internal debugger may come out handy:
 
 ```
-$ hc-client --debug examples/debugger/prog1.yaml
+$ hc-debug examples/debugger/prog1.yaml
 ```
 
 NOTE: `yaml` file with the contents of both scripts and TX hash, must be
@@ -355,9 +355,9 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [0]: https://api.hackchain.darksi.de/
 [1]: https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security
 [2]: http://www.eng.umd.edu/~blj/RiSC/RiSC-isa.pdf
-[3]: https://github.com/indutny/hackchain/issues
+[3]: https://github.com/hackchain/hackchain-core/issues
 [4]: https://en.wikipedia.org/wiki/Endianness
 [5]: http://www.johnloomis.org/ece449/notes/Jacob/ex-5.html
-[6]: https://github.com/indutny/hackchain/blob/c92921b8f44be3343aa98ba0fd740180469aa867/test/interpreter/interpreter-test.js#L78-L97
-[7]: https://github.com/indutny/hackchain/blob/master/examples/tx/
-[8]: https://github.com/indutny/hackchain/blob/master/examples/debugger/
+[6]: https://github.com/hackchain/hackchain-core/blob/d46b2a580f5413f5419298fc5dbf59b15562f562/test/interpreter/interpreter-test.js#L84-L103
+[7]: https://github.com/hackchain/hackchain-client/blob/master/examples/
+[8]: https://github.com/hackchain/hackchain-debugger/blob/master/examples/

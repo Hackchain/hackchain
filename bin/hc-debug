@@ -1,0 +1,4 @@
+#!/usr/bin/env node
+'use strict';
+
+require('hackchain-debugger/bin/hc-debug');
