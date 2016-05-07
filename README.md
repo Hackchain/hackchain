@@ -1,4 +1,5 @@
 # Hackchain
+[![NPM version](https://badge.fury.io/js/hackchain.svg)](http://badge.fury.io/js/hackchain)
 
 **Alpha version**
 
