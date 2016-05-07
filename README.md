@@ -147,7 +147,7 @@ to modify each other.
 
 The process:
 
-1. Spending TX (the one that you wrote) has is loaded to `0x0` offset of the
+1. Spending TX (the one that you sent) hash is loaded to `0x0` offset of the
    memory
 2. `output` script is loaded to `0x1000` offset of the memory and executed
    until `irq yield`/`irq success`, or until it executes more than
@@ -157,11 +157,10 @@ The process:
    ends. If `irc yield` was executed - proceed to step 4
 4. `input` script is loaded to `0x2000` offset of the memory
 5. One opcode of `output` is executed
-6. If any `irq ...` was executed - the process ends with either captured or
-   not captured coin (see step 3)
+6. If any `irq ...` was executed - the process ends with captured coin
 7. One opcode of `input` is executed
-8. If any `irq ...` was executed - step 7 is replaced by `no op`
-9. If number of opcodes executed in `output` after step 4 excdeeds `1024 * 1024`
+8. If any `irq ...` was executed - steps 7-8 are replaced by `no op`
+9. If number of opcodes executed in `output` after step 4 exceeds `1024 * 1024`
    - process terminates, and coin is not captured
 
 ### Scripts
