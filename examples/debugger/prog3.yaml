@@ -1,0 +1,30 @@
+hash: 'a1dd41f1efd2498dd8126684fe164d22d6188046b1c71a7d5325c2158965237b'
+output:
+  - codeOffset 0x1000
+  - irq yield
+  # load first var
+  - lea r1, var1
+  - lw r1, r1, 0
+  # load second var
+  - lea r2, var2
+  - lw r2, r2, 0
+  # add them
+  - add r1, r1, r2
+  # if result is `0` - skip `hlt`
+  - beq r0, r1, 1
+  - hlt
+  - irq success
+
+  # variables
+  - bind var1
+  - data 0x1358
+  - bind var2
+  - data 0x2323
+input:
+  # get address of `var1`
+  - lui r1, 0x40 # r1 = 0x1000
+  - movi r2, 0xeca8
+
+  # modify its value to `0xeca8`
+  - sw r2, r1, 0xc # [r1 + 0xc] = r2
+  - irq success
