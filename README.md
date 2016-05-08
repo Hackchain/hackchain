@@ -63,6 +63,11 @@ While recommended to read in order, one may skip all sections except
 [Capturing](#capturing), where the process of capturing (stealing) coins is
 described in detail.
 
+### Community
+
+Feel free to join [#hackchain][9] IRC channel on [freenode server][10] to
+discuss things with other hackers.
+
 ### Block
 
 Blocks have a link to the parent block (or a genesis block with the hash
@@ -369,3 +374,5 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 [6]: https://github.com/hackchain/hackchain-core/blob/d46b2a580f5413f5419298fc5dbf59b15562f562/test/interpreter/interpreter-test.js#L84-L103
 [7]: https://github.com/hackchain/hackchain-client/blob/master/examples/
 [8]: https://github.com/hackchain/hackchain-debugger/blob/master/examples/
+[9]: http://webchat.freenode.net?channels=%23hackchain&uio=d4
+[10]: https://freenode.net/
