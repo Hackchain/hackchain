@@ -39,7 +39,7 @@ blocks are issued automatically every 5 minutes. One may request the latest
 block hash either by using `--info` argument of the `hc-client`, or by running:
 
 ```bash
-curl https://api.hackchain.darksi.de/
+curl https://api.hackcha.in/
 ```
 
 The whole point of this "continuous hackathon" is to capture someone else's
@@ -52,7 +52,7 @@ steal coins from each other. List of currently unspent coins can be found by
 using `--unspent` argument of `hc-client`, or by running:
 
 ```bash
-curl https://api.hackchain.darksi.de/unspent
+curl https://api.hackcha.in/unspent
 ```
 
 Being very similar in structure to bitcoin blockchain, hackchain provides an
@@ -90,7 +90,7 @@ Block may be inspected using `--block <hash>` argument of the `hc-client`:
 Raw hex data may be fetched by running:
 
 ```bash
-curl https://api.hackchain.darksi.de/v1/block/<hash>
+curl https://api.hackcha.in/v1/block/<hash>
 ```
 
 Spec for the binary encodings of all structures is available below.
@@ -133,7 +133,7 @@ TX may be inspected using `--tx <hash>` argument of the
 Raw hex data may be inspected by running:
 
 ```bash
-curl https://api.hackchain.darksi.de/v1/tx/<hash>
+curl https://api.hackcha.in/v1/tx/<hash>
 ```
 
 ### Capturing
@@ -319,7 +319,7 @@ All values are in [Big Endian][4].
 ### Additional Server endpoints
 
 ```
-$ curl https://api.hackchain.darksi.de/help | jq .
+$ curl https://api.hackcha.in/help | jq .
 {
   "/": "information about server and last block",
   "/help": "this message",
@@ -360,7 +360,7 @@ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[0]: https://api.hackchain.darksi.de/
+[0]: https://api.hackcha.in/
 [1]: https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security
 [2]: http://www.eng.umd.edu/~blj/RiSC/RiSC-isa.pdf
 [3]: https://github.com/hackchain/hackchain-core/issues
