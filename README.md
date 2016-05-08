@@ -148,7 +148,7 @@ curl https://api.hackcha.in/v1/tx/<hash>
 In order to capture someone's coin (or coinbase), the attacker must implement an
 input script that will be able to defeat the output script of the TX.
 
-Scripts are written is [RiSC-16][3] (Ridiculously Simple Computer) instruction
+Scripts are written is [RiSC-16][2] (Ridiculously Simple Computer) instruction
 set and are running in a shared memory space of 0x10000 16-bit words. Yes, you
 read it right, the code is living in the same space, and the scripts are allowed
 to modify each other.
