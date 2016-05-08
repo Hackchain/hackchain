@@ -168,8 +168,8 @@ The process:
 6. If any `irq ...` was executed - the process ends with captured coin
 7. One opcode of `input` is executed
 8. If any `irq ...` was executed - steps 7-8 are replaced by `no op`
-9. If number of opcodes executed in `output` after step 4 exceeds `1024 * 1024`
-   - process terminates, and coin is not captured
+9. If number of opcodes executed in `output` after step 4 exceeds `1024 * 1024`:
+   process terminates, and coin is not captured
 
 ### Scripts
 
