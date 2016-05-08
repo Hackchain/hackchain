@@ -274,6 +274,13 @@ While some scripts may be easy to follow, others may definitely require more
 detailed investigation. This is where internal debugger may come out handy:
 
 ```
+$ hc-debug --tx examples/tx/debug.tx
+```
+
+Or alternatively, if you'd like to debug output script that it is not in the
+chain yet:
+
+```
 $ hc-debug examples/debugger/prog1.yaml
 ```
 
