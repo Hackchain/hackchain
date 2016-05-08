@@ -23,7 +23,9 @@ $ hc-client --info
   nextCoinbaseIn: 85817,
   'proof-of-work-complexity': 17 }
 
-$ hc-client --unspent
+$ hc-client --leaderboard
+===== Current top transactions =====
+NOTE: It is important to use both hash and index to steal a transaction
 [ { hash: '61d9faa5dc429c8eb4f00835f285b3a5f7022f8b557432a7af542d0b778bc14e',
     index: 4,
     value: '1500000000' },
@@ -48,11 +50,11 @@ participants compete with each other instead of attacking some predefined
 software.
 
 New coins are minted only once every 24 hours, so hackers are encouraged to
-steal coins from each other. List of currently unspent coins can be found by
-using `--unspent` argument of `hc-client`, or by running:
+steal coins from each other. Current leaderboard (list of unspent coins) can be
+found by using `--leaderboard` argument of `hc-client`, or by running:
 
 ```bash
-curl https://api.hackcha.in/unspent
+curl https://api.hackcha.in/leaderboard
 ```
 
 Being very similar in structure to bitcoin blockchain, hackchain provides an
@@ -328,12 +330,12 @@ $ curl https://api.hackcha.in/help | jq .
 {
   "/": "information about server and last block",
   "/help": "this message",
-  "/unspent": "list of currently unspent transactions",
+  "/leaderboard": "list of currently unspent transactions",
   "/v1/block/(hash)": "GET block data",
   "/v1/tx/(hash)": "GET/POST transaction data",
   "/v1/tx/(hash)/block": "GET the hash of transaction's block",
   "/v1/tx/(hash)/(output index)/spentby": "GET the hash of spending tx"
-  }
+}
 ```
 
 ### Bugs
