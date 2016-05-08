@@ -208,10 +208,12 @@ Additional opcode-combos are available using the assembler in this repo:
 - `farjmp rA, label-name` - generate far absolute jump to the specified label.
   NOTE: `rA` register will be overwritten to store the absolute offset
 - `bind label-name` - bind specified label to the current opcode offset
+- `lea rA, label-name` - load label's absolute address into the `rA` register
 - `codeOffset <16-bit offset>` - change code offset. Absolutely needed when
   using `farjmp` in code that doesn't start at `0x0000` memory offset
 - `movi rA, <16-bit immediate>` - will generate two opcodes `lui` nd `addi`
 - `nop` - will generate `add r0, r0, r0`
+- `data 0xabcd` - put the raw 16-bit word instead of an instruction
 
 Examples:
 
