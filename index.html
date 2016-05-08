@@ -197,12 +197,8 @@ ends. If <code>irc yield</code> was executed - proceed to step 4</li>
 <li>One opcode of <code>input</code> is executed</li>
 <li>If any <code>irq ...</code> was executed - steps 7-8 are replaced by <code>no op</code>
 </li>
-<li>If number of opcodes executed in <code>output</code> after step 4 exceeds <code>1024 * 1024</code>
-
-<ul>
-<li>process terminates, and coin is not captured</li>
-</ul>
-</li>
+<li>If number of opcodes executed in <code>output</code> after step 4 exceeds <code>1024 * 1024</code>:
+process terminates, and coin is not captured</li>
 </ol>
 
 <h3>
