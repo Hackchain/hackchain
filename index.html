@@ -40,7 +40,7 @@
 <h2>
 <a id="preamble" class="anchor" href="#preamble" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Preamble</h2>
 
-<p>A <a href="https://api.hackchain.darksi.de/">hackchain server</a> was running in a cloud. Some hacker has installed the
+<p>A <a href="https://api.hackcha.in/">hackchain server</a> was running in a cloud. Some hacker has installed the
 client for it:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ npm install -g hackchain</pre></div>
@@ -68,7 +68,7 @@ $ hc-client --unspent
 blocks are issued automatically every 5 minutes. One may request the latest
 block hash either by using <code>--info</code> argument of the <code>hc-client</code>, or by running:</p>
 
-<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/</pre></div>
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackcha.<span class="pl-k">in</span>/</pre></div>
 
 <p>The whole point of this "continuous hackathon" is to capture someone else's
 coins and protect them. It is very close to <a href="https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security">CTF challenges</a>, but
@@ -79,7 +79,7 @@ software.</p>
 steal coins from each other. List of currently unspent coins can be found by
 using <code>--unspent</code> argument of <code>hc-client</code>, or by running:</p>
 
-<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/unspent</pre></div>
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackcha.<span class="pl-k">in</span>/unspent</pre></div>
 
 <p>Being very similar in structure to bitcoin blockchain, hackchain provides an
 opportunity to learn about bitcoin internals, and most importantly have some
@@ -116,7 +116,7 @@ by anyone, unless its output value is <code>0</code>.</p>
 
 <p>Raw hex data may be fetched by running:</p>
 
-<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/v1/block/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackcha.<span class="pl-k">in</span>/v1/block/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
 
 <p>Spec for the binary encodings of all structures is available below.</p>
 
@@ -157,7 +157,7 @@ TX is stored.</p>
 
 <p>Raw hex data may be inspected by running:</p>
 
-<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/v1/tx/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackcha.<span class="pl-k">in</span>/v1/tx/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
 
 <h3>
 <a id="capturing" class="anchor" href="#capturing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Capturing</h3>
@@ -384,7 +384,7 @@ supplied to debugger. See <a href="https://github.com/hackchain/hackchain-debugg
 <h3>
 <a id="additional-server-endpoints" class="anchor" href="#additional-server-endpoints" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Server endpoints</h3>
 
-<pre><code>$ curl https://api.hackchain.darksi.de/help | jq .
+<pre><code>$ curl https://api.hackcha.in/help | jq .
 {
   "/": "information about server and last block",
   "/help": "this message",
