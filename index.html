@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Hackchain by Hackchain</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Hackchain</h1>
+        <h2>Continuous bitcoin-inspired hackaton. (Alpha)</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/Hackchain/hackchain/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/Hackchain/hackchain/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/Hackchain/hackchain" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="hackchain" class="anchor" href="#hackchain" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Hackchain</h1>
+
+<p><a href="http://badge.fury.io/js/hackchain"><img src="https://badge.fury.io/js/hackchain.svg" alt="NPM version"></a></p>
+
+<p><strong>Alpha version</strong></p>
+
+<p>Continuous bitcoin-inspired hackaton.</p>
+
+<h2>
+<a id="preamble" class="anchor" href="#preamble" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Preamble</h2>
+
+<p>A <a href="https://api.hackchain.darksi.de/">hackchain server</a> was running in a cloud. Some hacker has installed the
+client for it:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ npm install -g hackchain</pre></div>
+
+<p>Hacker has also requested a server info:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ hc-client --info
+{ lastBlock: <span class="pl-s"><span class="pl-pds">'</span>4e9c8600ca954bbfd88a1ca8715e5cf5a751a8e5945802912086e632bec85e1f<span class="pl-pds">'</span></span>,
+  nextBlockIn: 17,
+  nextCoinbaseIn: 85817,
+  <span class="pl-s"><span class="pl-pds">'</span>proof-of-work-complexity<span class="pl-pds">'</span></span>: 17 }
+
+$ hc-client --unspent
+[ { <span class="pl-c1">hash</span>: <span class="pl-s"><span class="pl-pds">'</span>61d9faa5dc429c8eb4f00835f285b3a5f7022f8b557432a7af542d0b778bc14e<span class="pl-pds">'</span></span>,
+    index: 4,
+    value: <span class="pl-s"><span class="pl-pds">'</span>1500000000<span class="pl-pds">'</span></span> },
+    ... ]</pre></div>
+
+<p>"I wonder if I can capture some of these coins...", she thought.</p>
+
+<h2>
+<a id="description-for-hackers" class="anchor" href="#description-for-hackers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description for Hackers</h2>
+
+<p>The server is running bitcoin-like blockchain with the main difference that the
+blocks are issued automatically every 5 minutes. One may request the latest
+block hash either by using <code>--info</code> argument of the <code>hc-client</code>, or by running:</p>
+
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/</pre></div>
+
+<p>The whole point of this "continuous hackathon" is to capture someone else's
+coins and protect them. It is very close to <a href="https://en.wikipedia.org/wiki/Capture_the_flag#Computer_security">CTF challenges</a>, but
+participants compete with each other instead of attacking some predefined
+software.</p>
+
+<p>New coins are minted only once every 24 hours, so hackers are encouraged to
+steal coins from each other. List of currently unspent coins can be found by
+using <code>--unspent</code> argument of <code>hc-client</code>, or by running:</p>
+
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/unspent</pre></div>
+
+<p>Being very similar in structure to bitcoin blockchain, hackchain provides an
+opportunity to learn about bitcoin internals, and most importantly have some
+fun!</p>
+
+<p>While recommended to read in order, one may skip all sections except
+<a href="#capturing">Capturing</a>, where the process of capturing (stealing) coins is
+described in detail.</p>
+
+<h3>
+<a id="block" class="anchor" href="#block" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Block</h3>
+
+<p>Blocks have a link to the parent block (or a genesis block with the hash
+<code>0000000....</code>, all zeroes), and a list of at least one transaction (TX). First
+TX in a block is called a coinbase and (in contrast to bitcoin) can be spent
+by anyone, unless its output value is <code>0</code>.</p>
+
+<p>Block may be inspected using <code>--block &lt;hash&gt;</code> argument of the <code>hc-client</code>:</p>
+
+<pre><code>&lt;Block: b1e6483...
+   parent: 6017999...
+   txs: [ &lt;Coinbase: 735c742...
+      v=1
+      inputs: [ &lt;Input hash: 6017999...
+          index: -1
+          script: &lt;Script len: 0
+          opcodes: [
+    ]&gt;&gt; ]
+      outputs: [ &lt;Output value: 2500000000
+          script: &lt;Script len: 2
+          opcodes: [
+    irq success]&gt;&gt; ]&gt; ]&gt;
+</code></pre>
+
+<p>Raw hex data may be fetched by running:</p>
+
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/v1/block/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
+
+<p>Spec for the binary encodings of all structures is available below.</p>
+
+<h3>
+<a id="tx" class="anchor" href="#tx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TX</h3>
+
+<p>Every transaction has at least one input and output.</p>
+
+<p>Each input has a <code>hash</code> of input TX, <code>index</code> of output in that TX, and <code>script</code>
+to capture it. (See <a href="#capturing">"Capturing" section</a> below).</p>
+
+<p>Each output has a <code>value</code> number of coins, and <code>script</code> to prevent capturing
+these coins.</p>
+
+<p>TX cannot spend more coins than it gets from the inputs, but it can spend less.
+The difference is called <code>fee</code> and is added to the coinbase of the block where
+TX is stored.</p>
+
+<p>TX may be inspected using <code>--tx &lt;hash&gt;</code> argument of the
+<code>hc-client</code>:</p>
+
+<pre><code>&lt;TX: 10319ac...
+    v=1
+    inputs: [ &lt;Input hash: 699eb0e...
+        index: 0
+        script: &lt;Script len: 8
+        opcodes: [
+  lui r1 64
+  addi r1 r1 0
+  sw r0 r1 8
+  irq success]&gt;&gt; ]
+    outputs: [ &lt;Output value: 2500000000
+        script: &lt;Script len: 4
+        opcodes: [
+  irq yield
+  irq success]&gt;&gt; ]&gt;
+</code></pre>
+
+<p>Raw hex data may be inspected by running:</p>
+
+<div class="highlight highlight-source-shell"><pre>curl https://api.hackchain.darksi.de/v1/tx/<span class="pl-k">&lt;</span><span class="pl-c1">hash</span><span class="pl-k">&gt;</span></pre></div>
+
+<h3>
+<a id="capturing" class="anchor" href="#capturing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Capturing</h3>
+
+<p>In order to capture someone's coin (or coinbase), the attacker must implement an
+input script that will be able to defeat the output script of the TX.</p>
+
+<p>Scripts are written is <a href="https://github.com/hackchain/hackchain-core/issues">RiSC-16</a> (Ridiculously Simple Computer) instruction
+set and are running in a shared memory space of 0x10000 16-bit words. Yes, you
+read it right, the code is living in the same space, and the scripts are allowed
+to modify each other.</p>
+
+<p>The process:</p>
+
+<ol>
+<li>Spending TX (the one that you sent) hash is loaded to <code>0x0</code> offset of the
+memory</li>
+<li>
+<code>output</code> script is loaded to <code>0x1000</code> offset of the memory and executed
+until <code>irq yield</code>/<code>irq success</code>, or until it executes more than
+<code>100 * 1024</code> opcodes (if so - coin is captured, and further steps are
+skipped)</li>
+<li>If <code>irq success</code> was executed in step 2 - coin is captured and the process
+ends. If <code>irc yield</code> was executed - proceed to step 4</li>
+<li>
+<code>input</code> script is loaded to <code>0x2000</code> offset of the memory</li>
+<li>One opcode of <code>output</code> is executed</li>
+<li>If any <code>irq ...</code> was executed - the process ends with captured coin</li>
+<li>One opcode of <code>input</code> is executed</li>
+<li>If any <code>irq ...</code> was executed - steps 7-8 are replaced by <code>no op</code>
+</li>
+<li>If number of opcodes executed in <code>output</code> after step 4 exceeds <code>1024 * 1024</code>
+
+<ul>
+<li>process terminates, and coin is not captured</li>
+</ul>
+</li>
+</ol>
+
+<h3>
+<a id="scripts" class="anchor" href="#scripts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scripts</h3>
+
+<p>Quoting <a href="http://www.eng.umd.edu/%7Eblj/RiSC/RiSC-isa.pdf">RiSC-16</a>, there are 8 different 16-bit registers (<code>r0</code>, ..., <code>r7</code>),
+and 10 different instructions:</p>
+
+<ul>
+<li>
+<code>add rA, rB, rC</code> - Add contents of regB with regC, store result in regA</li>
+<li>
+<code>addi rA, rB, imm</code> - Add contents of regB with imm, store result in regA</li>
+<li>
+<code>nand rA, rB, rC</code> - Nand contents of regB with regC, store results in regA</li>
+<li>
+<code>lui rA, imm</code> - Place the 10 ten bits of the 16-bit imm into the 10 ten bits
+of regA, setting the bottom 6 bits of regA to zero</li>
+<li>
+<code>sw rA, rB, imm</code> - Store value from regA into memory. Memory address is formed
+by adding imm with contents of regB</li>
+<li>
+<code>lw rA, rB, imm</code> - Load value from memory into regA. Memory address is formed
+by adding imm with contents of regB</li>
+<li>
+<code>beq rA, rB, imm</code> - If the contents of regA and regB are the same, branch to
+the address PC+1+imm, where PC is the address of the beq instruction</li>
+<li>
+<code>jalr rA, rB</code> - Branch to the address in regB. Store PC+1 into regA, where PC
+is the address of the jalr instruction.</li>
+</ul>
+
+<p>They are encoded just as they are described in <a href="http://www.eng.umd.edu/%7Eblj/RiSC/RiSC-isa.pdf">a paper</a>.</p>
+
+<p>Additional opcodes are added in hackchain:</p>
+
+<ul>
+<li>
+<code>irq success</code> - terminate thread (see <a href="#capturing">capturing</a> too), encoded
+as <code>0xe001</code> word in big endian</li>
+<li>
+<code>irq yield</code> - yield execution to input script (see
+<a href="#capturing">step 2 above</a>), encoded as <code>0xe081</code> word in big endian</li>
+</ul>
+
+<p>NOTE: Reading value of <code>r0</code> always returns <code>0</code> for your convenience!</p>
+
+<p>Additional opcode-combos are available using the assembler in this repo:</p>
+
+<ul>
+<li>
+<code>jmp label-name</code> - generate short (within 64 opcodes) relative jump to the
+specified label</li>
+<li>
+<code>farjmp rA, label-name</code> - generate far absolute jump to the specified label.
+NOTE: <code>rA</code> register will be overwritten to store the absolute offset</li>
+<li>
+<code>bind label-name</code> - bind specified label to the current opcode offset</li>
+<li>
+<code>codeOffset &lt;16-bit offset&gt;</code> - change code offset. Absolutely needed when
+using <code>farjmp</code> in code that doesn't start at <code>0x0000</code> memory offset</li>
+<li>
+<code>movi rA, &lt;16-bit immediate&gt;</code> - will generate two opcodes <code>lui</code> nd <code>addi</code>
+</li>
+<li>
+<code>nop</code> - will generate <code>add r0, r0, r0</code>
+</li>
+</ul>
+
+<p>Examples:</p>
+
+<ul>
+<li><a href="http://www.johnloomis.org/ece449/notes/Jacob/ex-5.html">advanced RiSC-16 coding</a></li>
+<li>
+<a href="https://github.com/hackchain/hackchain-core/blob/d46b2a580f5413f5419298fc5dbf59b15562f562/test/interpreter/interpreter-test.js#L84-L103">fighting scripts</a>, see <a href="#spending-tx-with-hc-client">section</a> below</li>
+</ul>
+
+<h3>
+<a id="spending-tx-with-hc-client" class="anchor" href="#spending-tx-with-hc-client" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Spending TX with hc-client</h3>
+
+<p><a href="https://asciinema.org/a/44859"><img src="https://asciinema.org/a/44859.png" alt="asciicast"></a></p>
+
+<p>It is possible to generate and send TX using <code>hc-client</code>. In order to do this,
+a yaml-formatted <code>tx-name.tx</code> file must be created:</p>
+
+<div class="highlight highlight-source-yaml"><pre><span class="pl-c1"><span class="pl-ent">version:</span> 1</span>
+<span class="pl-s"><span class="pl-ent">inputs:</span></span>
+  <span class="pl-s">- <span class="pl-ent">hash:</span> <span class="pl-s"><span class="pl-pds">'</span>a1dd41f1efd2498dd8126684fe164d22d6188046b1c71a7d5325c2158965237b<span class="pl-pds">'</span></span></span>
+    <span class="pl-c1"><span class="pl-ent">index:</span> 0</span>
+    <span class="pl-s"><span class="pl-ent">script:</span></span>
+      <span class="pl-s">- <span class="pl-s">irq success</span></span>
+<span class="pl-s"><span class="pl-ent">outputs:</span></span>
+  <span class="pl-s">- <span class="pl-ent">value:</span> <span class="pl-s"><span class="pl-pds">'</span>2500000000<span class="pl-pds">'</span></span></span>
+    <span class="pl-s"><span class="pl-ent">script:</span></span>
+      <span class="pl-s">- <span class="pl-s">irq yield</span></span>
+      <span class="pl-s">- <span class="pl-s">irq success</span></span></pre></div>
+
+<p>(See <a href="https://github.com/hackchain/hackchain-client/blob/master/examples/">examples/</a> for more various TX examples)</p>
+
+<p>NOTE: <code>script</code> arrays have string values. <code>,</code> or <code></code> separators may be used
+between opcode and arguments, and between arguments. Arguments are either:</p>
+
+<ul>
+<li>
+<code>rN</code> - register input/output, where <code>N</code> is a number from <code>0</code> to <code>7</code>
+</li>
+<li>
+<code>N</code> - immediate value, where <code>N</code> is a decimal integer
+(either positive or negative)</li>
+<li>
+<code>string</code> - anything that does not fit into one of two bullet points above.
+Usually used in <code>irq</code> opcodes (<code>irq success</code>, <code>irq yield</code>).</li>
+</ul>
+
+<p>Afterwards, one may execute:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ hc-client --spend tx-name.tx</pre></div>
+
+<p>It will parse file, generate TX, confirm it, and send it to server. If the
+server will accept the TX, the confirmation will be printed. If the server will
+reject the TX, a (hopefully) meaningful error message will be printed.</p>
+
+<p>NOTE: While TXs are accepted immediately, they are not available for spending
+until the server will mint a new block. Please check output of
+<code>hc-client --info</code> to get the time until the next block.</p>
+
+<h3>
+<a id="debugger" class="anchor" href="#debugger" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Debugger</h3>
+
+<p><a href="https://asciinema.org/a/44862"><img src="https://asciinema.org/a/44862.png" alt="asciicast"></a></p>
+
+<p>While some scripts may be easy to follow, others may definitely require more
+detailed investigation. This is where internal debugger may come out handy:</p>
+
+<pre><code>$ hc-debug examples/debugger/prog1.yaml
+</code></pre>
+
+<p>NOTE: <code>yaml</code> file with the contents of both scripts and TX hash, must be
+supplied to debugger. See <a href="https://github.com/hackchain/hackchain-debugger/blob/master/examples/">debugger examples</a></p>
+
+<h3>
+<a id="binary-format" class="anchor" href="#binary-format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Binary Format</h3>
+
+<p>All values are in <a href="https://en.wikipedia.org/wiki/Endianness">Big Endian</a>.</p>
+
+<h4>
+<a id="block-1" class="anchor" href="#block-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Block</h4>
+
+<pre><code>[ 32-bit number ] version
+[ 32 bytes      ] parent sha256 hash
+[ 32-bit number ] TX count
+...               TXs
+</code></pre>
+
+<h4>
+<a id="tx-1" class="anchor" href="#tx-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>TX</h4>
+
+<pre><code>[ 32-bit number ] version
+[ 32-bit number ] input count
+[ 32-bit number ] output count
+...               inputs
+...               outputs
+</code></pre>
+
+<h4>
+<a id="input" class="anchor" href="#input" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Input</h4>
+
+<pre><code>[ 32 bytes      ] sha256 hash of input TX
+[ 32-bit number ] input index
+...               script
+</code></pre>
+
+<h4>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Output</h4>
+
+<pre><code>[ 8 bytes       ] big endian big number
+...               script
+</code></pre>
+
+<h4>
+<a id="script" class="anchor" href="#script" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Script</h4>
+
+<pre><code>[ 32-bit number ] size of binary data below
+...               binary opcodes for RiSC-16
+</code></pre>
+
+<h3>
+<a id="additional-server-endpoints" class="anchor" href="#additional-server-endpoints" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Server endpoints</h3>
+
+<pre><code>$ curl https://api.hackchain.darksi.de/help | jq .
+{
+  "/": "information about server and last block",
+  "/help": "this message",
+  "/unspent": "list of currently unspent transactions",
+  "/v1/block/(hash)": "GET block data",
+  "/v1/tx/(hash)": "GET/POST transaction data",
+  "/v1/tx/(hash)/block": "GET the hash of transaction's block",
+  "/v1/tx/(hash)/(output index)/spentby": "GET the hash of spending tx"
+  }
+</code></pre>
+
+<h3>
+<a id="bugs" class="anchor" href="#bugs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bugs</h3>
+
+<p>If any bugs, please <a href="https://github.com/hackchain/hackchain-core/issues">file an issue</a>. We will make sure to figure it out!</p>
+
+<h4>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LICENSE</h4>
+
+<p>This software is licensed under the MIT License.</p>
+
+<p>Copyright Fedor Indutny, 2016.</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit
+persons to whom the Software is furnished to do so, subject to the
+following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
