@@ -262,6 +262,8 @@ NOTE: <code>rA</code> register will be overwritten to store the absolute offset<
 <li>
 <code>bind label-name</code> - bind specified label to the current opcode offset</li>
 <li>
+<code>lea rA, label-name</code> - load label's absolute address into the <code>rA</code> register</li>
+<li>
 <code>codeOffset &lt;16-bit offset&gt;</code> - change code offset. Absolutely needed when
 using <code>farjmp</code> in code that doesn't start at <code>0x0000</code> memory offset</li>
 <li>
@@ -270,6 +272,8 @@ using <code>farjmp</code> in code that doesn't start at <code>0x0000</code> memo
 <li>
 <code>nop</code> - will generate <code>add r0, r0, r0</code>
 </li>
+<li>
+<code>data 0xabcd</code> - put the raw 16-bit word instead of an instruction</li>
 </ul>
 
 <p>Examples:</p>
