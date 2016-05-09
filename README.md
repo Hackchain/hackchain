@@ -150,8 +150,10 @@ input script that will be able to defeat the output script of the TX.
 
 Scripts are written is [RiSC-16][2] (Ridiculously Simple Computer) instruction
 set and are running in a shared memory space of 0x10000 16-bit words. Yes, you
-read it right, the code is living in the same space, and the scripts are allowed
-to modify each other.
+read it right, the code is living in the same space, and the input script is
+allowed to modify the output script. (Not vice versa, however. The
+0x2000-0x2fff memory range is protected from the output script's writes, but
+output can still read input's code)
 
 The process:
 
