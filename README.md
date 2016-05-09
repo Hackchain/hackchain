@@ -3,7 +3,7 @@
 
 **Alpha version**
 
-Continuous bitcoin-inspired capture-the-flag challenge.
+Continuous bitcoin-inspired capture-the-flag competition.
 
 ## Preamble
 
@@ -44,8 +44,8 @@ block hash either by using `--info` argument of the `hc-client`, or by running:
 curl https://api.hackcha.in/
 ```
 
-The whole point of this "continuous CTF challenge" is to capture someone else's
-coins and protect them. It is very close to [CTF challenges][1], but
+The whole point of this "continuous CTF competition" is to capture someone else's
+coins and protect them. It is very close to [CTF competitions][1], but
 participants compete with each other instead of attacking some predefined
 software.
 
