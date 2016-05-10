@@ -181,7 +181,7 @@ and 10 different instructions:
 - `add rA, rB, rC` - Add contents of regB with regC, store result in regA
 - `addi rA, rB, imm` - Add contents of regB with imm, store result in regA
 - `nand rA, rB, rC` - Nand contents of regB with regC, store results in regA
-- `lui rA, imm` - Place the 10 ten bits of the 16-bit imm into the 10 ten bits
+- `lui rA, imm` - Place the 10 bits of the 16-bit imm into the 10 bits
   of regA, setting the bottom 6 bits of regA to zero
 - `sw rA, rB, imm` - Store value from regA into memory. Memory address is formed
   by adding imm with contents of regB
