@@ -11,8 +11,10 @@ output:
   # add them
   - add r1, r1, r2
   # if result is `0` - skip `hlt`
-  - beq r0, r1, 1
+  - beq r0, r1, success
   - hlt
+
+  - bind success
   - irq success
 
   # variables
@@ -22,7 +24,7 @@ output:
   - data 0x2323
 input:
   # get address of `var1`
-  - lui r1, 0x40 # r1 = 0x1000
+  - lui r1, 0x1000 # r1 = 0x1000
   - movi r2, 0xeca8
 
   # modify its value to `0xeca8`

@@ -1,0 +1,30 @@
+version: 1
+inputs:
+  - hash: '61539fb59412970528b901aaceb2a9fbb4322d78b36c7c1323e1afac7bcec8d5'
+    index: 0
+    script:
+      # get address of `var1`
+      - lui r1, 0x40 # r1 = 0x1000
+      - movi r2, 0xeca8
+
+      # modify its value to `0xeca8`
+      - sw r2, r1, 0xc # [r1 + 0xc] = r2
+      - irq success
+outputs:
+  - value: '400000000'
+    script:
+      # see prog3.yaml
+      - codeOffset 0x1000
+      - irq yield
+      - lea r1, var1
+      - lw r1, r1, 0
+      - lea r2, var2
+      - lw r2, r2, 0
+      - add r1, r1, r2
+      - beq r0, r1, 1
+      - hlt
+      - irq success
+      - bind var1
+      - data 0x1358
+      - bind var2
+      - data 0x2323
