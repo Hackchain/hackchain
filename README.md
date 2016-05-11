@@ -161,7 +161,7 @@ The process:
    memory
 2. `output` script is loaded to `0x1000` offset of the memory and executed
    until `irq yield`/`irq success`, or until it executes more than
-   `100 * 1024` opcodes (if so - coin is captured, and further steps are
+   `16 * 1024` opcodes (if so - coin is captured, and further steps are
    skipped)
 3. If `irq success` was executed in step 2 - coin is captured and the process
    ends. If `irc yield` was executed - proceed to step 4
@@ -170,7 +170,7 @@ The process:
 6. If any `irq ...` was executed - the process ends with captured coin
 7. One opcode of `input` is executed
 8. If any `irq ...` was executed - steps 7-8 are replaced by `no op`
-9. If number of opcodes executed in `output` after step 4 exceeds `1024 * 1024`:
+9. If number of opcodes executed in `output` after step 4 exceeds `32 * 1024`:
    process terminates, and coin is not captured
 
 ### Scripts
