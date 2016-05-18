@@ -175,10 +175,8 @@ input script that will be able to defeat the output script of the TX.</p>
 
 <p>Scripts are written is <a href="http://www.eng.umd.edu/%7Eblj/RiSC/RiSC-isa.pdf">RiSC-16</a> (Ridiculously Simple Computer) instruction
 set and are running in a shared memory space of 0x10000 16-bit words. Yes, you
-read it right, the code is living in the same space, and the input script is
-allowed to modify the output script. (Not vice versa, however. The
-0x2000-0x2fff memory range is protected from the output script's writes, but
-output can still read input's code)</p>
+read it right, the code is living in the same space, and the scripts are
+allowed to modify each other.</p>
 
 <p>The process:</p>
 
@@ -199,6 +197,7 @@ ends. If <code>irc yield</code> was executed - proceed to step 4</li>
 <li>One opcode of <code>input</code> is executed</li>
 <li>If any <code>irq ...</code> was executed - steps 7-8 are replaced by <code>no op</code>
 </li>
+<li>Memory stores from steps 6 and 8 are applied to the shared memory</li>
 <li>If number of opcodes executed in <code>output</code> after step 4 exceeds <code>32 * 1024</code>:
 process terminates, and coin is not captured</li>
 </ol>
